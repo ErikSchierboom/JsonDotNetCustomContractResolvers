@@ -6,6 +6,7 @@
     using Newtonsoft.Json.Serialization;
 
     using Xunit;
+    using Xunit.Extensions;
 
     public class CustomPropertiesContractResolverTests
     {
@@ -55,6 +56,26 @@
             
             var customPropertiesContractResolver = new CustomPropertiesContractResolver();
             customPropertiesContractResolver.Fields.Add("Movie.Id");
+
+            // Act
+            var json = JsonConvert.SerializeObject(objectToSerialize, CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
+
+            // Assert
+            Assert.Equal("{\"Id\":12}", json);
+        }
+
+        [Theory]
+        [InlineData("Movie.Id")]
+        [InlineData("MOVIE.Id")]
+        [InlineData("MOVIE.ID")]
+        [InlineData("movie.id")]
+        public void ConvertingWithFieldsIsNotCaseSensitive(string field)
+        {
+            // Arrange
+            var objectToSerialize = CreateObjectToSerialize();
+
+            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
+            customPropertiesContractResolver.Fields.Add(field);
 
             // Act
             var json = JsonConvert.SerializeObject(objectToSerialize, CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -146,6 +167,26 @@
 
             // Assert
             Assert.Equal("{\"Id\":12,\"Title\":\"Inception\",\"Year\":2010,\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\",\"Age\":42}}", json);
+        }
+
+        [Theory]
+        [InlineData("Movie.Id")]
+        [InlineData("MOVIE.Id")]
+        [InlineData("MOVIE.ID")]
+        [InlineData("movie.id")]
+        public void ConvertingWithExcludeFieldsIsNotCaseSensitive(string field)
+        {
+            // Arrange
+            var objectToSerialize = CreateObjectToSerialize();
+
+            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
+            customPropertiesContractResolver.ExcludeFields.Add(field);
+
+            // Act
+            var json = JsonConvert.SerializeObject(objectToSerialize, CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
+
+            // Assert
+            Assert.Equal("{\"Title\":\"Inception\",\"Year\":2010,\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\",\"Age\":42}}", json);
         }
 
         [Fact]
@@ -245,6 +286,23 @@
 
             // Assert
             Assert.Equal("{\"Id\":12,\"Title\":\"Inception\",\"Year\":2010,\"Director\":{}}", json);
+        }
+
+        [Fact]
+        public void ConvertingWithPropertyBeingSpecifiedAsBothFieldAndExcludeFieldWillNotSerializeProperty()
+        {
+            // Arrange
+            var objectToSerialize = CreateObjectToSerialize();
+
+            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
+            customPropertiesContractResolver.Fields.Add("Movie.Director");
+            customPropertiesContractResolver.ExcludeFields.Add("Movie.Director");
+
+            // Act
+            var json = JsonConvert.SerializeObject(objectToSerialize, CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
+
+            // Assert
+            Assert.Equal("{}}", json);
         }
 
         private static JsonSerializerSettings CreateCustomJsonSerializerSettings(IContractResolver contractResolver)

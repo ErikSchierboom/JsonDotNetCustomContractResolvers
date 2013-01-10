@@ -1,5 +1,6 @@
 namespace CustomContractResolvers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
@@ -60,12 +61,16 @@ namespace CustomContractResolvers
 
             if (this.Fields.Any())
             {
-                jsonProperty.ShouldSerialize = i => this.Fields.Contains(GetWildcardName(jsonProperty)) || this.Fields.Contains(GetFullName(jsonProperty));
+                jsonProperty.ShouldSerialize = i => 
+                    this.Fields.Contains(GetWildcardName(jsonProperty), StringComparer.OrdinalIgnoreCase) || 
+                    this.Fields.Contains(GetFullName(jsonProperty), StringComparer.OrdinalIgnoreCase);
             }
 
             if (this.ExcludeFields.Any())
             {
-                jsonProperty.ShouldSerialize = i => !this.ExcludeFields.Contains(GetWildcardName(jsonProperty)) && !this.ExcludeFields.Contains(GetFullName(jsonProperty));
+                jsonProperty.ShouldSerialize = i => 
+                    !this.ExcludeFields.Contains(GetWildcardName(jsonProperty), StringComparer.OrdinalIgnoreCase) && 
+                    !this.ExcludeFields.Contains(GetFullName(jsonProperty), StringComparer.OrdinalIgnoreCase);
             }
 
             return jsonProperty;
