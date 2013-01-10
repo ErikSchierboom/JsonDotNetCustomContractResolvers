@@ -1,0 +1,6 @@
+# git ignore file
+packages
+bin
+obj
+JsonDotNetCustomContractResolvers.sln.DotSettings
+JsonDotNetCustomContractResolvers.sln.DotSettings.user
