@@ -1,0 +1,1 @@
+"..\.nuget\nuget.exe" pack -Prop Configuration=Release -OutputDirectory "..\.nuget" "CustomContractResolvers.csproj" -Symbols

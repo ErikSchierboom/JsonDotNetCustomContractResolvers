@@ -1,4 +1,4 @@
-namespace CustomContractResolvers.Tests.Stubs
+namespace JsonDotNet.CustomContractResolvers.Tests.Stubs
 {
     internal class Director
     {

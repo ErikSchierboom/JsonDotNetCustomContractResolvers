@@ -1,4 +1,4 @@
-namespace CustomContractResolvers
+namespace JsonDotNet.CustomContractResolvers
 {
     using System;
     using System.Reflection;

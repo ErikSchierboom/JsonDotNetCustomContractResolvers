@@ -1,8 +1,8 @@
-﻿namespace CustomContractResolvers.Tests
+﻿namespace JsonDotNet.CustomContractResolvers.Tests
 {
     using System.Linq;
 
-    using CustomContractResolvers.Tests.Stubs;
+    using JsonDotNet.CustomContractResolvers.Tests.Stubs;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
