@@ -21,8 +21,8 @@ namespace CustomContractResolvers
         /// </summary>
         public CustomPropertiesContractResolver()
         {
-            this.Fields = new List<string>();
-            this.ExcludeFields = new List<string>();
+            this.Fields = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            this.ExcludeFields = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace CustomContractResolvers
         /// <remarks>
         /// If no fields have been specified, by default all fields will be serialized.
         /// </remarks>
-        public IList<string> Fields { get; private set; }
+        public ISet<string> Fields { get; private set; }
         
         /// <summary>
         /// Gets the fields that are not to be serialized.
@@ -45,7 +45,7 @@ namespace CustomContractResolvers
         /// <remarks>
         /// If no exclude fields have been specified, by default all fields will be serialized.
         /// </remarks>
-        public IList<string> ExcludeFields { get; private set; }
+        public ISet<string> ExcludeFields { get; private set; }
 
         /// <summary>
         /// Creates a <see cref="T:Newtonsoft.Json.Serialization.JsonProperty" /> for the given <see cref="T:System.Reflection.MemberInfo" />.
@@ -62,15 +62,15 @@ namespace CustomContractResolvers
             if (this.Fields.Any())
             {
                 jsonProperty.ShouldSerialize = i => 
-                    this.Fields.Contains(GetWildcardName(jsonProperty), StringComparer.OrdinalIgnoreCase) || 
-                    this.Fields.Contains(GetFullName(jsonProperty), StringComparer.OrdinalIgnoreCase);
+                    this.Fields.Contains(GetWildcardName(jsonProperty)) || 
+                    this.Fields.Contains(GetFullName(jsonProperty));
             }
 
             if (this.ExcludeFields.Any())
             {
                 jsonProperty.ShouldSerialize = i => 
-                    !this.ExcludeFields.Contains(GetWildcardName(jsonProperty), StringComparer.OrdinalIgnoreCase) && 
-                    !this.ExcludeFields.Contains(GetFullName(jsonProperty), StringComparer.OrdinalIgnoreCase);
+                    !this.ExcludeFields.Contains(GetWildcardName(jsonProperty)) && 
+                    !this.ExcludeFields.Contains(GetFullName(jsonProperty));
             }
 
             return jsonProperty;
