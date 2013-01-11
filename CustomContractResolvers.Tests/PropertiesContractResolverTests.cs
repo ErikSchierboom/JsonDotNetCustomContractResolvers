@@ -118,7 +118,7 @@
         }
 
         [Fact]
-        public void ConvertingWithPropertyWithoutDeclaringTypeNameWillUseTypeOfRootProperty()
+        public void ConvertingWithPropertiesWithoutDeclaringTypeNameWillUseTypeOfRootProperty()
         {
             // Arrange
             var customPropertiesContractResolver = new PropertiesContractResolver();
@@ -255,6 +255,21 @@
 
             // Assert
             Assert.Equal("{}", json);
+        }
+
+        [Fact]
+        public void ConvertingWithExcludePropertiesWithoutDeclaringTypeNameWillUseTypeOfRootProperty()
+        {
+            // Arrange
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.ExcludeProperties.Add("Id");
+            customPropertiesContractResolver.ExcludeProperties.Add("Title");
+
+            // Act
+            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
+
+            // Assert
+            Assert.Equal("{\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\"}}", json);
         }
 
         [Fact]

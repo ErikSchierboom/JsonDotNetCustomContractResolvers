@@ -15,6 +15,8 @@ namespace JsonDotNet.CustomContractResolvers
     public class PropertiesContractResolver : CustomPropertyContractResolver
     {
         private const string Wildcard = "*";
+        private const string PropertyTypeAndNameSeparator = ".";
+        private Type rootType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertiesContractResolver" /> class.
@@ -47,8 +49,19 @@ namespace JsonDotNet.CustomContractResolvers
         /// </remarks>
         public ISet<string> ExcludeProperties { get; private set; }
 
+        /// <summary>
+        /// Creates properties for the given <see cref="T:Newtonsoft.Json.Serialization.JsonContract" />.
+        /// </summary>
+        /// <param name="type">The type to create properties for.</param>
+        /// <param name="memberSerialization">The member serialization mode for the type.</param>
+        /// <returns>
+        /// Properties for the given <see cref="T:Newtonsoft.Json.Serialization.JsonContract" />.
+        /// </returns>
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
+            NormalizeRootProperties(type, this.Properties);
+            NormalizeRootProperties(type, this.ExcludeProperties);
+
             return base.CreateProperties(type, memberSerialization);
         }
 
@@ -62,9 +75,9 @@ namespace JsonDotNet.CustomContractResolvers
         /// </returns>
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
-            if (this.NoFieldsHaveBeenSpecified())
+            if (this.NoPropertiesHaveBeenSpecified())
             {
-                this.SerializeAllFields();
+                this.SerializeAllProperties();
             }
 
             return base.CreateProperty(member, memberSerialization);
@@ -75,46 +88,63 @@ namespace JsonDotNet.CustomContractResolvers
             return i => this.PropertyIsIncluded(jsonProperty) && !this.PropertyIsExcluded(jsonProperty);
         }
 
-        private static bool FieldsContainsProperty(ICollection<string> fields, JsonProperty jsonProperty)
+        private static void NormalizeRootProperties(Type type, ISet<string> properties)
         {
-            return fields.Contains(Wildcard) ||
-                   fields.Contains(GetWildcardForProperty(jsonProperty)) ||
-                   fields.Contains(GetFullName(jsonProperty));
+            var rootProperties = properties.Where(IsRootProperty).ToList();
+
+            foreach (var rootProperty in rootProperties)
+            {
+                var fullNameForRootProperty = GetFullNameForTypeProperty(type, rootProperty);
+                properties.Add(fullNameForRootProperty);
+                properties.Remove(rootProperty);
+            }
+        }
+
+        private static bool IsRootProperty(string p)
+        {
+            return p != Wildcard && !p.Contains(PropertyTypeAndNameSeparator);
+        }
+
+        private static bool PropertiesContainsProperty(ICollection<string> properties, JsonProperty jsonProperty)
+        {
+            return properties.Contains(Wildcard) ||
+                   properties.Contains(GetWildcardForProperty(jsonProperty)) ||
+                   properties.Contains(GetFullName(jsonProperty));
         }
 
         private static string GetWildcardForProperty(JsonProperty jsonProperty)
         {
-            return GetFullNameForTypePropery(jsonProperty.DeclaringType, Wildcard);
+            return GetFullNameForTypeProperty(jsonProperty.DeclaringType, Wildcard);
         }
 
         private static string GetFullName(JsonProperty jsonProperty)
         {
-            return GetFullNameForTypePropery(jsonProperty.DeclaringType, jsonProperty.PropertyName);
+            return GetFullNameForTypeProperty(jsonProperty.DeclaringType, jsonProperty.PropertyName);
         }
 
-        private static string GetFullNameForTypePropery(MemberInfo declaringType, string propertyName)
+        private static string GetFullNameForTypeProperty(MemberInfo declaringType, string propertyName)
         {
-            return declaringType.Name + "." + propertyName;
+            return declaringType.Name + PropertyTypeAndNameSeparator + propertyName;
         }
 
-        private void SerializeAllFields()
+        private void SerializeAllProperties()
         {
             this.Properties.Add(Wildcard);
         }
 
-        private bool NoFieldsHaveBeenSpecified()
+        private bool NoPropertiesHaveBeenSpecified()
         {
             return !this.Properties.Any();
         }
 
         private bool PropertyIsIncluded(JsonProperty jsonProperty)
         {
-            return FieldsContainsProperty(this.Properties, jsonProperty);
+            return PropertiesContainsProperty(this.Properties, jsonProperty);
         }
 
         private bool PropertyIsExcluded(JsonProperty jsonProperty)
         {
-            return FieldsContainsProperty(this.ExcludeProperties, jsonProperty);
+            return PropertiesContainsProperty(this.ExcludeProperties, jsonProperty);
         }
     }
 }
