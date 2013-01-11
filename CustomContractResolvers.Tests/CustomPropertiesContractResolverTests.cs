@@ -2,6 +2,8 @@
 {
     using System.Linq;
 
+    using CustomContractResolvers.Tests.Stubs;
+
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
 
@@ -149,7 +151,7 @@
             var json = JsonConvert.SerializeObject(objectToSerialize, CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
 
             // Assert
-            Assert.Equal("{\"Id\":12,\"Title\":\"Inception\",\"Year\":2010,\"Director\":{}}", json);
+            Assert.Equal("{\"Id\":12,\"Title\":\"Inception\",\"Director\":{}}", json);
         }
 
         [Fact]
@@ -166,7 +168,7 @@
             var json = JsonConvert.SerializeObject(objectToSerialize, CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
 
             // Assert
-            Assert.Equal("{\"Id\":12,\"Title\":\"Inception\",\"Year\":2010,\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\",\"Age\":42}}", json);
+            Assert.Equal("{\"Id\":12,\"Title\":\"Inception\",\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\"}}", json);
         }
 
         [Theory]
@@ -186,7 +188,7 @@
             var json = JsonConvert.SerializeObject(objectToSerialize, CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
 
             // Assert
-            Assert.Equal("{\"Title\":\"Inception\",\"Year\":2010,\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\",\"Age\":42}}", json);
+            Assert.Equal("{\"Title\":\"Inception\",\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\"}}", json);
         }
 
         [Fact]
@@ -202,7 +204,7 @@
             var json = JsonConvert.SerializeObject(objectToSerialize, CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
 
             // Assert
-            Assert.Equal("{\"Title\":\"Inception\",\"Year\":2010,\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\",\"Age\":42}}", json);
+            Assert.Equal("{\"Title\":\"Inception\",\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\"}}", json);
         }
 
         [Fact]
@@ -219,7 +221,7 @@
             var json = JsonConvert.SerializeObject(objectToSerialize, CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
 
             // Assert
-            Assert.Equal("{\"Year\":2010,\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\",\"Age\":42}}", json);
+            Assert.Equal("{\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\"}}", json);
         }
 
         [Fact]
@@ -236,7 +238,7 @@
             var json = JsonConvert.SerializeObject(objectToSerialize, CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
 
             // Assert
-            Assert.Equal("{\"Id\":12,\"Year\":2010}", json);
+            Assert.Equal("{\"Id\":12}", json);
         }
 
         [Fact]
@@ -253,7 +255,7 @@
             var json = JsonConvert.SerializeObject(objectToSerialize, CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
 
             // Assert
-            Assert.Equal("{\"Id\":12,\"Year\":2010,\"Director\":{\"Id\":77,\"Age\":42}}", json);
+            Assert.Equal("{\"Id\":12,\"Director\":{\"Id\":77}}", json);
         }
 
         [Fact]
@@ -285,7 +287,7 @@
             var json = JsonConvert.SerializeObject(objectToSerialize, CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
 
             // Assert
-            Assert.Equal("{\"Id\":12,\"Title\":\"Inception\",\"Year\":2010,\"Director\":{}}", json);
+            Assert.Equal("{\"Id\":12,\"Title\":\"Inception\",\"Director\":{}}", json);
         }
 
         [Fact]
@@ -321,12 +323,10 @@
                        {
                            Id = 12,
                            Title = "Inception",
-                           Year = 2010,
                            Director = new Director
                                           {
                                               Id = 77,
                                               Name = "Christopher Nolan",
-                                              Age = 42
                                           }
                        };
         }

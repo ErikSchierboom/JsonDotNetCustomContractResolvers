@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomContractResolvers", "CustomContractResolvers\CustomContractResolvers.csproj", "{063DA447-7014-4427-BDFD-61EE10E612DC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomContractResolvers.Tests", "CustomContractResolvers.Tests\CustomContractResolvers.Tests.csproj", "{6D9AAE3B-B024-48A5-9CFE-C8009D9578FE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5EF86A49-19A5-4E48-B26E-4189EEA40C6A}"
@@ -10,20 +8,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomContractResolvers", "CustomContractResolvers\CustomContractResolvers.csproj", "{04350F33-8624-4585-B3B3-08C8C7E3BE11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{063DA447-7014-4427-BDFD-61EE10E612DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{063DA447-7014-4427-BDFD-61EE10E612DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{063DA447-7014-4427-BDFD-61EE10E612DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{063DA447-7014-4427-BDFD-61EE10E612DC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6D9AAE3B-B024-48A5-9CFE-C8009D9578FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6D9AAE3B-B024-48A5-9CFE-C8009D9578FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D9AAE3B-B024-48A5-9CFE-C8009D9578FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D9AAE3B-B024-48A5-9CFE-C8009D9578FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04350F33-8624-4585-B3B3-08C8C7E3BE11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04350F33-8624-4585-B3B3-08C8C7E3BE11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04350F33-8624-4585-B3B3-08C8C7E3BE11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04350F33-8624-4585-B3B3-08C8C7E3BE11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

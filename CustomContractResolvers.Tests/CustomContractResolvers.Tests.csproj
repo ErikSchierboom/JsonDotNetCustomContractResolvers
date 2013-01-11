@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CustomContractResolvers\CustomContractResolvers.csproj">
-      <Project>{063da447-7014-4427-bdfd-61ee10e612dc}</Project>
+      <Project>{04350f33-8624-4585-b3b3-08c8c7e3be11}</Project>
       <Name>CustomContractResolvers</Name>
     </ProjectReference>
   </ItemGroup>
