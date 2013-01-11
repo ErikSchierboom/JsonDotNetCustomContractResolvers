@@ -14,7 +14,7 @@ namespace CustomContractResolvers
     /// </summary>
     public class CustomPropertiesContractResolver : DefaultContractResolver
     {
-        private const string WildcardPropertyName = "*";
+        private const string Wildcard = "*";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomPropertiesContractResolver" /> class.
@@ -35,7 +35,7 @@ namespace CustomContractResolvers
         /// If no fields have been specified, all fields will be serialized.
         /// </remarks>
         public ISet<string> Fields { get; private set; }
-        
+
         /// <summary>
         /// Gets the fields that are not to be serialized.
         /// </summary>
@@ -57,30 +57,27 @@ namespace CustomContractResolvers
         /// </returns>
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
+            if (this.NoFieldsHaveBeenSpecified())
+            {
+                this.SerializeAllFields();
+            }
+
             var jsonProperty = base.CreateProperty(member, memberSerialization);
-
-            if (this.Fields.Any())
-            {
-                jsonProperty.ShouldSerialize = i =>
-                    this.Fields.Contains(WildcardPropertyName) ||
-                    this.Fields.Contains(GetWildcardName(jsonProperty)) || 
-                    this.Fields.Contains(GetFullName(jsonProperty));
-            }
-
-            if (this.ExcludeFields.Any())
-            {
-                jsonProperty.ShouldSerialize = i =>
-                    !this.ExcludeFields.Contains(WildcardPropertyName) && 
-                    !this.ExcludeFields.Contains(GetWildcardName(jsonProperty)) && 
-                    !this.ExcludeFields.Contains(GetFullName(jsonProperty));
-            }
+            jsonProperty.ShouldSerialize = i => this.PropertyIsIncluded(jsonProperty) && !this.PropertyIsExcluded(jsonProperty);
 
             return jsonProperty;
         }
 
-        private static string GetWildcardName(JsonProperty jsonProperty)
+        private static bool FieldsContainsProperty(ICollection<string> fields, JsonProperty jsonProperty)
         {
-            return GetFullNameForTypePropery(jsonProperty.DeclaringType, WildcardPropertyName);
+            return fields.Contains(Wildcard) ||
+                   fields.Contains(GetWildcardForProperty(jsonProperty)) ||
+                   fields.Contains(GetFullName(jsonProperty));
+        }
+
+        private static string GetWildcardForProperty(JsonProperty jsonProperty)
+        {
+            return GetFullNameForTypePropery(jsonProperty.DeclaringType, Wildcard);
         }
 
         private static string GetFullName(JsonProperty jsonProperty)
@@ -91,6 +88,26 @@ namespace CustomContractResolvers
         private static string GetFullNameForTypePropery(MemberInfo declaringType, string propertyName)
         {
             return declaringType.Name + "." + propertyName;
+        }
+
+        private void SerializeAllFields()
+        {
+            this.Fields.Add(Wildcard);
+        }
+
+        private bool NoFieldsHaveBeenSpecified()
+        {
+            return !this.Fields.Any();
+        }
+
+        private bool PropertyIsIncluded(JsonProperty jsonProperty)
+        {
+            return FieldsContainsProperty(this.Fields, jsonProperty);
+        }
+
+        private bool PropertyIsExcluded(JsonProperty jsonProperty)
+        {
+            return FieldsContainsProperty(this.ExcludeFields, jsonProperty);
         }
     }
 }

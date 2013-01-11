@@ -334,14 +334,44 @@
         {
             // Arrange
             var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.Fields.Add("Movie.Director");
-            customPropertiesContractResolver.ExcludeFields.Add("Movie.Director");
+            customPropertiesContractResolver.Fields.Add("Director.Name");
+            customPropertiesContractResolver.ExcludeFields.Add("Director.Name");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
 
             // Assert
-            Assert.Equal("{}}", json);
+            Assert.Equal("{}", json);
+        }
+
+        [Fact]
+        public void ConvertingWithWildcardPropertyBeingSpecifiedAsBothFieldAndExcludeFieldWillNotSerializeProperties()
+        {
+            // Arrange
+            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
+            customPropertiesContractResolver.Fields.Add("Director.*");
+            customPropertiesContractResolver.ExcludeFields.Add("Director.*");
+
+            // Act
+            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
+
+            // Assert
+            Assert.Equal("{}", json);
+        }
+
+        [Fact]
+        public void ConvertingWithWildcardBeingSpecifiedAsBothFieldAndExcludeFieldWillNotSerializeProperties()
+        {
+            // Arrange
+            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
+            customPropertiesContractResolver.Fields.Add("*");
+            customPropertiesContractResolver.ExcludeFields.Add("*");
+
+            // Act
+            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
+
+            // Assert
+            Assert.Equal("{}", json);
         }
 
         private static JsonSerializerSettings CreateCustomJsonSerializerSettings(IContractResolver contractResolver)
