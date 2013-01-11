@@ -47,6 +47,11 @@ namespace JsonDotNet.CustomContractResolvers
         /// </remarks>
         public ISet<string> ExcludeProperties { get; private set; }
 
+        protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
+        {
+            return base.CreateProperties(type, memberSerialization);
+        }
+
         /// <summary>
         /// Creates a <see cref="T:Newtonsoft.Json.Serialization.JsonProperty" /> for the given <see cref="T:System.Reflection.MemberInfo" />.
         /// </summary>

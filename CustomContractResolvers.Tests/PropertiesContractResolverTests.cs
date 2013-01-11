@@ -118,6 +118,21 @@
         }
 
         [Fact]
+        public void ConvertingWithPropertyWithoutDeclaringTypeNameWillUseTypeOfRootProperty()
+        {
+            // Arrange
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.Properties.Add("Id");
+            customPropertiesContractResolver.Properties.Add("Title");
+
+            // Act
+            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
+
+            // Assert
+            Assert.Equal("{\"Id\":12,\"Title\":\"Inception\"}", json);
+        }
+
+        [Fact]
         public void ConvertingWithPropertiesContainsSeveralPropertiesOnlySerializesSpecifiedProperties()
         {
             // Arrange
