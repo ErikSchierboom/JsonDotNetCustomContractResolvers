@@ -51,6 +51,23 @@
         }
 
         [Fact]
+        public void ConvertingWithFieldsIsGeneralWildcardSerializesObjectLikeDefault()
+        {
+            // Arrange
+            var objectToSerialize = CreateObjectToSerialize();
+
+            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
+            customPropertiesContractResolver.Fields.Add("*");
+
+            // Act
+            var jsonUsingDefaultSerializer = JsonConvert.SerializeObject(objectToSerialize, CreateDefaultJsonSerializerSettings());
+            var jsonUsingCustomSerializer = JsonConvert.SerializeObject(objectToSerialize, CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
+
+            // Assert
+            Assert.Equal(jsonUsingDefaultSerializer, jsonUsingCustomSerializer);
+        }
+
+        [Fact]
         public void ConvertingWithFieldsContainsOneFieldOnlySerializesSpecifiedField()
         {
             // Arrange
@@ -189,6 +206,22 @@
 
             // Assert
             Assert.Equal("{\"Title\":\"Inception\",\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\"}}", json);
+        }
+
+        [Fact]
+        public void ConvertingWithExcludeFieldsIsGeneralWildcardDoesNotSerializeAnyProperties()
+        {
+            // Arrange
+            var objectToSerialize = CreateObjectToSerialize();
+
+            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
+            customPropertiesContractResolver.ExcludeFields.Add("*");
+
+            // Act
+            var json = JsonConvert.SerializeObject(objectToSerialize, CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
+
+            // Assert
+            Assert.Equal("{}", json);
         }
 
         [Fact]

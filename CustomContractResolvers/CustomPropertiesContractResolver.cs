@@ -32,7 +32,7 @@ namespace CustomContractResolvers
         /// The fields.
         /// </value>
         /// <remarks>
-        /// If no fields have been specified, by default all fields will be serialized.
+        /// If no fields have been specified, all fields will be serialized.
         /// </remarks>
         public ISet<string> Fields { get; private set; }
         
@@ -43,7 +43,7 @@ namespace CustomContractResolvers
         /// The exclude fields.
         /// </value>
         /// <remarks>
-        /// If no exclude fields have been specified, by default all fields will be serialized.
+        /// If no exclude fields have been specified, all fields will be serialized.
         /// </remarks>
         public ISet<string> ExcludeFields { get; private set; }
 
@@ -61,14 +61,16 @@ namespace CustomContractResolvers
 
             if (this.Fields.Any())
             {
-                jsonProperty.ShouldSerialize = i => 
+                jsonProperty.ShouldSerialize = i =>
+                    this.Fields.Contains(WildcardPropertyName) ||
                     this.Fields.Contains(GetWildcardName(jsonProperty)) || 
                     this.Fields.Contains(GetFullName(jsonProperty));
             }
 
             if (this.ExcludeFields.Any())
             {
-                jsonProperty.ShouldSerialize = i => 
+                jsonProperty.ShouldSerialize = i =>
+                    !this.ExcludeFields.Contains(WildcardPropertyName) && 
                     !this.ExcludeFields.Contains(GetWildcardName(jsonProperty)) && 
                     !this.ExcludeFields.Contains(GetFullName(jsonProperty));
             }
