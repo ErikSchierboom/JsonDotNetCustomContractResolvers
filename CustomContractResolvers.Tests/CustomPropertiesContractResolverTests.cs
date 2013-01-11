@@ -99,6 +99,24 @@
             Assert.Equal("{\"Id\":12}", json);
         }
 
+        [Theory]
+        [InlineData("Movie.Inventory")]
+        [InlineData("Movie.Id2")]
+        [InlineData("Movie.Id ")]
+        [InlineData(" Movie.Id")]
+        public void ConvertingWithOnlyUnknownFieldsReturnsEmptyObjct(string unknownField)
+        {
+            // Arrange
+            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
+            customPropertiesContractResolver.Fields.Add(unknownField);
+
+            // Act
+            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
+
+            // Assert
+            Assert.Equal("{}", json);
+        }
+
         [Fact]
         public void ConvertingWithFieldsContainsSeveralFieldsOnlySerializesSpecifiedFields()
         {
@@ -190,6 +208,24 @@
 
             // Assert
             Assert.Equal("{\"Title\":\"Inception\",\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\"}}", json);
+        }
+
+        [Theory]
+        [InlineData("Movie.Inventory")]
+        [InlineData("Movie.Id2")]
+        [InlineData("Movie.Id ")]
+        [InlineData(" Movie.Id")]
+        public void ConvertingIgnoresUnknownExcludeFields(string unknownField)
+        {
+            // Arrange
+            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
+            customPropertiesContractResolver.ExcludeFields.Add(unknownField);
+
+            // Act
+            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
+
+            // Assert
+            Assert.Equal("{\"Id\":12,\"Title\":\"Inception\",\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\"}}", json);
         }
 
         [Fact]
