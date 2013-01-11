@@ -10,54 +10,54 @@
     using Xunit;
     using Xunit.Extensions;
 
-    public class CustomPropertiesContractResolverTests
+    public class PropertiesContractResolverTests
     {
         [Fact]
-        public void ByDefaultNoFieldsAreSpecified()
+        public void ByDefaultNoPropertiesAreSpecified()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
+            var customPropertiesContractResolver = new PropertiesContractResolver();
 
             // Act
 
             // Assert
-            Assert.False(customPropertiesContractResolver.Fields.Any());
+            Assert.False(customPropertiesContractResolver.Properties.Any());
         }
 
         [Fact]
-        public void ByDefaultNoExcludeFieldsAreSpecified()
+        public void ByDefaultNoExcludePropertiesAreSpecified()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
+            var customPropertiesContractResolver = new PropertiesContractResolver();
 
             // Act
 
             // Assert
-            Assert.False(customPropertiesContractResolver.ExcludeFields.Any());
+            Assert.False(customPropertiesContractResolver.ExcludeProperties.Any());
         }
 
         [Fact]
-        public void ConvertingWithFieldsAndExcludeFieldsAreEmptySerializesObjectLikeDefault()
+        public void ConvertingWithPropertiesAndExcludePropertiesAreEmptySerializesObjectLikeDefault()
         {
             // Arrange
             var objectToSerialize = CreateObjectToSerialize();
 
             // Act
             var jsonUsingDefaultSerializer = JsonConvert.SerializeObject(objectToSerialize, CreateDefaultJsonSerializerSettings());
-            var jsonUsingCustomSerializer = JsonConvert.SerializeObject(objectToSerialize, CreateCustomJsonSerializerSettings(new CustomPropertiesContractResolver()));
+            var jsonUsingCustomSerializer = JsonConvert.SerializeObject(objectToSerialize, CreateCustomJsonSerializerSettings(new PropertiesContractResolver()));
 
             // Assert
             Assert.Equal(jsonUsingDefaultSerializer, jsonUsingCustomSerializer);
         }
 
         [Fact]
-        public void ConvertingWithFieldsIsGeneralWildcardSerializesObjectLikeDefault()
+        public void ConvertingWithPropertiesIsGeneralWildcardSerializesObjectLikeDefault()
         {
             // Arrange
             var objectToSerialize = CreateObjectToSerialize();
 
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.Fields.Add("*");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.Properties.Add("*");
 
             // Act
             var jsonUsingDefaultSerializer = JsonConvert.SerializeObject(objectToSerialize, CreateDefaultJsonSerializerSettings());
@@ -68,11 +68,11 @@
         }
 
         [Fact]
-        public void ConvertingWithFieldsContainsOneFieldOnlySerializesSpecifiedField()
+        public void ConvertingWithPropertiesContainsOneFieldOnlySerializesSpecifiedField()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.Fields.Add("Movie.Id");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.Properties.Add("Movie.Id");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -86,11 +86,11 @@
         [InlineData("MOVIE.Id")]
         [InlineData("MOVIE.ID")]
         [InlineData("movie.id")]
-        public void ConvertingWithFieldsIsNotCaseSensitive(string field)
+        public void ConvertingWithPropertiesIsNotCaseSensitive(string field)
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.Fields.Add(field);
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.Properties.Add(field);
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -104,11 +104,11 @@
         [InlineData("Movie.Id2")]
         [InlineData("Movie.Id ")]
         [InlineData(" Movie.Id")]
-        public void ConvertingWithOnlyUnknownFieldsReturnsEmptyObjct(string unknownField)
+        public void ConvertingWithOnlyUnknownPropertiesReturnsEmptyObjct(string unknownField)
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.Fields.Add(unknownField);
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.Properties.Add(unknownField);
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -118,12 +118,12 @@
         }
 
         [Fact]
-        public void ConvertingWithFieldsContainsSeveralFieldsOnlySerializesSpecifiedFields()
+        public void ConvertingWithPropertiesContainsSeveralPropertiesOnlySerializesSpecifiedProperties()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.Fields.Add("Movie.Id");
-            customPropertiesContractResolver.Fields.Add("Movie.Title");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.Properties.Add("Movie.Id");
+            customPropertiesContractResolver.Properties.Add("Movie.Title");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -133,12 +133,12 @@
         }
 
         [Fact]
-        public void ConvertingWithFieldsContainsFieldForNestedPropertyOnlySerializesSpecifiedFields()
+        public void ConvertingWithPropertiesContainsFieldForNestedPropertyOnlySerializesSpecifiedProperties()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.Fields.Add("Movie.Title");
-            customPropertiesContractResolver.Fields.Add("Movie.Director");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.Properties.Add("Movie.Title");
+            customPropertiesContractResolver.Properties.Add("Movie.Director");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -148,13 +148,13 @@
         }
 
         [Fact]
-        public void ConvertingWithFieldsContainsFieldOfNestedPropertyOnlySerializesSpecifiedFields()
+        public void ConvertingWithPropertiesContainsFieldOfNestedPropertyOnlySerializesSpecifiedProperties()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.Fields.Add("Movie.Title");
-            customPropertiesContractResolver.Fields.Add("Movie.Director");
-            customPropertiesContractResolver.Fields.Add("Director.Name");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.Properties.Add("Movie.Title");
+            customPropertiesContractResolver.Properties.Add("Movie.Director");
+            customPropertiesContractResolver.Properties.Add("Director.Name");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -164,11 +164,11 @@
         }
 
         [Fact]
-        public void ConvertingWithFieldsWildcardAddedForPropertySerializesAllFieldsForSpecifiedProperty()
+        public void ConvertingWithPropertiesWildcardAddedForPropertySerializesAllPropertiesForSpecifiedProperty()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.Fields.Add("Movie.*");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.Properties.Add("Movie.*");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -178,12 +178,12 @@
         }
 
         [Fact]
-        public void ConvertingWithFieldsWildcardAddedForNestedPropertySerializesAllFieldsForSpecifiedNestedProperty()
+        public void ConvertingWithPropertiesWildcardAddedForNestedPropertySerializesAllPropertiesForSpecifiedNestedProperty()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.Fields.Add("Movie.*");
-            customPropertiesContractResolver.Fields.Add("Director.*");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.Properties.Add("Movie.*");
+            customPropertiesContractResolver.Properties.Add("Director.*");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -197,11 +197,11 @@
         [InlineData("MOVIE.Id")]
         [InlineData("MOVIE.ID")]
         [InlineData("movie.id")]
-        public void ConvertingWithExcludeFieldsIsNotCaseSensitive(string field)
+        public void ConvertingWithExcludePropertiesIsNotCaseSensitive(string field)
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.ExcludeFields.Add(field);
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.ExcludeProperties.Add(field);
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -215,11 +215,11 @@
         [InlineData("Movie.Id2")]
         [InlineData("Movie.Id ")]
         [InlineData(" Movie.Id")]
-        public void ConvertingIgnoresUnknownExcludeFields(string unknownField)
+        public void ConvertingIgnoresUnknownExcludeProperties(string unknownField)
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.ExcludeFields.Add(unknownField);
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.ExcludeProperties.Add(unknownField);
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -229,11 +229,11 @@
         }
 
         [Fact]
-        public void ConvertingWithExcludeFieldsIsGeneralWildcardDoesNotSerializeAnyProperties()
+        public void ConvertingWithExcludePropertiesIsGeneralWildcardDoesNotSerializeAnyProperties()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.ExcludeFields.Add("*");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.ExcludeProperties.Add("*");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -243,11 +243,11 @@
         }
 
         [Fact]
-        public void ConvertingWithExcludeFieldsContainsOneFieldDoesNotSerializeSpecifiedField()
+        public void ConvertingWithExcludePropertiesContainsOneFieldDoesNotSerializeSpecifiedField()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.ExcludeFields.Add("Movie.Id");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.ExcludeProperties.Add("Movie.Id");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -257,12 +257,12 @@
         }
 
         [Fact]
-        public void ConvertingWithExcludeFieldsContainsSeveralFieldsDoesNotSerializeSpecifiedFields()
+        public void ConvertingWithExcludePropertiesContainsSeveralPropertiesDoesNotSerializeSpecifiedProperties()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.ExcludeFields.Add("Movie.Id");
-            customPropertiesContractResolver.ExcludeFields.Add("Movie.Title");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.ExcludeProperties.Add("Movie.Id");
+            customPropertiesContractResolver.ExcludeProperties.Add("Movie.Title");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -272,12 +272,12 @@
         }
 
         [Fact]
-        public void ConvertingWithExcludeFieldsContainsFieldForNestedPropertyOnlySerializesSpecifiedFields()
+        public void ConvertingWithExcludePropertiesContainsFieldForNestedPropertyOnlySerializesSpecifiedProperties()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.ExcludeFields.Add("Movie.Title");
-            customPropertiesContractResolver.ExcludeFields.Add("Movie.Director");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.ExcludeProperties.Add("Movie.Title");
+            customPropertiesContractResolver.ExcludeProperties.Add("Movie.Director");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -287,12 +287,12 @@
         }
 
         [Fact]
-        public void ConvertingWithExcludeFieldsContainsFieldOfNestedPropertyOnlySerializesSpecifiedFields()
+        public void ConvertingWithExcludePropertiesContainsFieldOfNestedPropertyOnlySerializesSpecifiedProperties()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.ExcludeFields.Add("Movie.Title");
-            customPropertiesContractResolver.ExcludeFields.Add("Director.Name");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.ExcludeProperties.Add("Movie.Title");
+            customPropertiesContractResolver.ExcludeProperties.Add("Director.Name");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -302,11 +302,11 @@
         }
 
         [Fact]
-        public void ConvertingWithExcludeFieldsWildcardAddedForPropertySerializesAllFieldsForSpecifiedProperty()
+        public void ConvertingWithExcludePropertiesWildcardAddedForPropertySerializesAllPropertiesForSpecifiedProperty()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.ExcludeFields.Add("Movie.*");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.ExcludeProperties.Add("Movie.*");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -316,11 +316,11 @@
         }
 
         [Fact]
-        public void ConvertingWithExcludeFieldsWildcardAddedForNestedPropertySerializesAllFieldsForSpecifiedNestedProperty()
+        public void ConvertingWithExcludePropertiesWildcardAddedForNestedPropertySerializesAllPropertiesForSpecifiedNestedProperty()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.ExcludeFields.Add("Director.*");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.ExcludeProperties.Add("Director.*");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -333,9 +333,9 @@
         public void ConvertingWithPropertyBeingSpecifiedAsBothFieldAndExcludeFieldWillNotSerializeProperty()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.Fields.Add("Director.Name");
-            customPropertiesContractResolver.ExcludeFields.Add("Director.Name");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.Properties.Add("Director.Name");
+            customPropertiesContractResolver.ExcludeProperties.Add("Director.Name");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -348,9 +348,9 @@
         public void ConvertingWithWildcardPropertyBeingSpecifiedAsBothFieldAndExcludeFieldWillNotSerializeProperties()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.Fields.Add("Director.*");
-            customPropertiesContractResolver.ExcludeFields.Add("Director.*");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.Properties.Add("Director.*");
+            customPropertiesContractResolver.ExcludeProperties.Add("Director.*");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
@@ -363,9 +363,9 @@
         public void ConvertingWithWildcardBeingSpecifiedAsBothFieldAndExcludeFieldWillNotSerializeProperties()
         {
             // Arrange
-            var customPropertiesContractResolver = new CustomPropertiesContractResolver();
-            customPropertiesContractResolver.Fields.Add("*");
-            customPropertiesContractResolver.ExcludeFields.Add("*");
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.Properties.Add("*");
+            customPropertiesContractResolver.ExcludeProperties.Add("*");
 
             // Act
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));

@@ -43,7 +43,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomPropertiesContractResolverTests.cs" />
+    <Compile Include="PropertiesContractResolverTests.cs" />
     <Compile Include="Stubs\Director.cs" />
     <Compile Include="Stubs\Movie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

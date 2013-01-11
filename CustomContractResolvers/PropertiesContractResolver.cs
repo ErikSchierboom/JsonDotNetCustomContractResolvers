@@ -12,40 +12,40 @@ namespace CustomContractResolvers
     /// A contract resolver that allows the caller to specify exactly which properties are to be serialized by 
     /// using simple strings.
     /// </summary>
-    public class CustomPropertiesContractResolver : DefaultContractResolver
+    public class PropertiesContractResolver : CustomPropertyContractResolver
     {
         private const string Wildcard = "*";
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomPropertiesContractResolver" /> class.
+        /// Initializes a new instance of the <see cref="PropertiesContractResolver" /> class.
         /// </summary>
-        public CustomPropertiesContractResolver()
+        public PropertiesContractResolver()
         {
-            this.Fields = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            this.ExcludeFields = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            this.Properties = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            this.ExcludeProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
-        /// Gets the fields to serialize.
+        /// Gets the names of the properties to serialize.
         /// </summary>
         /// <value>
-        /// The fields.
+        /// The names of the properties to serialize.
         /// </value>
         /// <remarks>
-        /// If no fields have been specified, all fields will be serialized.
+        /// If no properties have been specified, all properties will be serialized.
         /// </remarks>
-        public ISet<string> Fields { get; private set; }
+        public ISet<string> Properties { get; private set; }
 
         /// <summary>
-        /// Gets the fields that are not to be serialized.
+        /// Gets the name of the properties that are not to be serialized.
         /// </summary>
         /// <value>
-        /// The exclude fields.
+        /// The names of the properties to exclude.
         /// </value>
         /// <remarks>
-        /// If no exclude fields have been specified, all fields will be serialized.
+        /// If no exclude properties have been specified, all properties will be serialized.
         /// </remarks>
-        public ISet<string> ExcludeFields { get; private set; }
+        public ISet<string> ExcludeProperties { get; private set; }
 
         /// <summary>
         /// Creates a <see cref="T:Newtonsoft.Json.Serialization.JsonProperty" /> for the given <see cref="T:System.Reflection.MemberInfo" />.
@@ -62,10 +62,12 @@ namespace CustomContractResolvers
                 this.SerializeAllFields();
             }
 
-            var jsonProperty = base.CreateProperty(member, memberSerialization);
-            jsonProperty.ShouldSerialize = i => this.PropertyIsIncluded(jsonProperty) && !this.PropertyIsExcluded(jsonProperty);
+            return base.CreateProperty(member, memberSerialization);
+        }
 
-            return jsonProperty;
+        protected override Predicate<object> ShouldSerialize(JsonProperty jsonProperty)
+        {
+            return i => this.PropertyIsIncluded(jsonProperty) && !this.PropertyIsExcluded(jsonProperty);
         }
 
         private static bool FieldsContainsProperty(ICollection<string> fields, JsonProperty jsonProperty)
@@ -92,22 +94,22 @@ namespace CustomContractResolvers
 
         private void SerializeAllFields()
         {
-            this.Fields.Add(Wildcard);
+            this.Properties.Add(Wildcard);
         }
 
         private bool NoFieldsHaveBeenSpecified()
         {
-            return !this.Fields.Any();
+            return !this.Properties.Any();
         }
 
         private bool PropertyIsIncluded(JsonProperty jsonProperty)
         {
-            return FieldsContainsProperty(this.Fields, jsonProperty);
+            return FieldsContainsProperty(this.Properties, jsonProperty);
         }
 
         private bool PropertyIsExcluded(JsonProperty jsonProperty)
         {
-            return FieldsContainsProperty(this.ExcludeFields, jsonProperty);
+            return FieldsContainsProperty(this.ExcludeProperties, jsonProperty);
         }
     }
 }
