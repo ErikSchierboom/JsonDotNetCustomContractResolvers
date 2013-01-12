@@ -20,10 +20,23 @@ namespace JsonDotNet.CustomContractResolvers
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertiesContractResolver" /> class.
         /// </summary>
-        public PropertiesContractResolver()
+        /// <param name="properties">The properties.</param>
+        /// <param name="excludeProperties">The exclude properties.</param>
+        public PropertiesContractResolver(string properties = "", string excludeProperties = "")
         {
-            this.Properties = new PropertiesCollection();
-            this.ExcludeProperties = new PropertiesCollection();
+            this.Properties = new PropertiesCollection(properties);
+            this.ExcludeProperties = new PropertiesCollection(excludeProperties);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PropertiesContractResolver" /> class.
+        /// </summary>
+        /// <param name="properties">The properties.</param>
+        /// <param name="excludeProperties">The exclude properties.</param>
+        public PropertiesContractResolver(IEnumerable<string> properties, IEnumerable<string> excludeProperties)
+        {
+            this.Properties = new PropertiesCollection(properties);
+            this.ExcludeProperties = new PropertiesCollection(excludeProperties);
         }
 
         /// <summary>
