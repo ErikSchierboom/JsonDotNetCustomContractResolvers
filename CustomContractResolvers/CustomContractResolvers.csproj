@@ -39,6 +39,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PropertiesCollection.cs" />
     <Compile Include="PropertiesContractResolver.cs" />
     <Compile Include="CustomPropertyContractResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
