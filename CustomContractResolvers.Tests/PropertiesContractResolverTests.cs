@@ -13,7 +13,7 @@
     public class PropertiesContractResolverTests
     {
         [Fact]
-        public void ByDefaultNoPropertiesAreSpecified()
+        public void DefaultConstructorSetsPropertiesToEmptySet()
         {
             // Arrange
             var customPropertiesContractResolver = new PropertiesContractResolver();
@@ -25,7 +25,7 @@
         }
 
         [Fact]
-        public void ByDefaultNoExcludePropertiesAreSpecified()
+        public void DefaultConstructorSetsExcludePropertiesToEmptySet()
         {
             // Arrange
             var customPropertiesContractResolver = new PropertiesContractResolver();
@@ -228,8 +228,8 @@
         [Theory]
         [InlineData("Movie.Inventory")]
         [InlineData("Movie.Id2")]
-        [InlineData("Movie.Id ")]
-        [InlineData(" Movie.Id")]
+        [InlineData("Movie.Id_")]
+        [InlineData("_Movie.Id")]
         public void ConvertingIgnoresUnknownExcludeProperties(string unknownField)
         {
             // Arrange
