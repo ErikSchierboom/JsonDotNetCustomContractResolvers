@@ -11,7 +11,11 @@
     <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes></releaseNotes>
+    <releaseNotes>
+        Properties and exclude properties can be set in the constructor of the PropertiesContractResolver class.
+        Properties and exclude properties can be set through comma- and space-separated strings.
+        Properties on the root now do not require the root type to be specified.
+    </releaseNotes>
     <copyright>Copyright 2013</copyright>
     <tags>JSON.NET JSON ContractResolver Properties Exclude</tags>
   </metadata>
