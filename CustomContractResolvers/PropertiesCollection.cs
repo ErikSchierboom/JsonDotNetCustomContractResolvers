@@ -7,6 +7,9 @@
 
     public class PropertiesCollection : HashSet<string>
     {
+        private const char CommaSeparator = ',';
+        private const char SpaceSeparator = ' ';
+
         public PropertiesCollection() : base(StringComparer.OrdinalIgnoreCase)
         {
         }
@@ -27,6 +30,11 @@
         {
         }
 
+        public new bool Add(string item)
+        {
+            return ParseProperties(item).Aggregate(false, (current, property) => current | base.Add(property));
+        }
+
         private static IEnumerable<string> ParseProperties(string properties)
         {
             if (properties == null)
@@ -34,7 +42,7 @@
                 throw new ArgumentNullException("properties");
             }
 
-            return properties.Split(',', ' ').Where(p => !string.IsNullOrWhiteSpace(properties));
+            return properties.Split(CommaSeparator, SpaceSeparator).Where(p => !string.IsNullOrWhiteSpace(properties));
         }
     }
 }
