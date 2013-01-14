@@ -16,15 +16,27 @@ namespace JsonDotNet.CustomContractResolvers
     {
         private const string Wildcard = "*";
         private const string PropertyTypeAndNameSeparator = ".";
-        private Type rootType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertiesContractResolver" /> class.
         /// </summary>
-        public PropertiesContractResolver()
+        /// <param name="properties">The properties.</param>
+        /// <param name="excludeProperties">The exclude properties.</param>
+        public PropertiesContractResolver(string properties = "", string excludeProperties = "")
         {
-            this.Properties = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            this.ExcludeProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            this.Properties = new PropertiesCollection(properties);
+            this.ExcludeProperties = new PropertiesCollection(excludeProperties);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PropertiesContractResolver" /> class.
+        /// </summary>
+        /// <param name="properties">The properties.</param>
+        /// <param name="excludeProperties">The exclude properties.</param>
+        public PropertiesContractResolver(IEnumerable<string> properties, IEnumerable<string> excludeProperties)
+        {
+            this.Properties = new PropertiesCollection(properties);
+            this.ExcludeProperties = new PropertiesCollection(excludeProperties);
         }
 
         /// <summary>
@@ -36,7 +48,7 @@ namespace JsonDotNet.CustomContractResolvers
         /// <remarks>
         /// If no properties have been specified, all properties will be serialized.
         /// </remarks>
-        public ISet<string> Properties { get; private set; }
+        public PropertiesCollection Properties { get; private set; }
 
         /// <summary>
         /// Gets the name of the properties that are not to be serialized.
@@ -47,7 +59,7 @@ namespace JsonDotNet.CustomContractResolvers
         /// <remarks>
         /// If no exclude properties have been specified, all properties will be serialized.
         /// </remarks>
-        public ISet<string> ExcludeProperties { get; private set; }
+        public PropertiesCollection ExcludeProperties { get; private set; }
 
         /// <summary>
         /// Creates properties for the given <see cref="T:Newtonsoft.Json.Serialization.JsonContract" />.

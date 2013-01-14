@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomPropertyContractResolverTests.cs" />
+    <Compile Include="PropertiesCollectionTests.cs" />
     <Compile Include="PropertiesContractResolverTests.cs" />
     <Compile Include="Stubs\Director.cs" />
     <Compile Include="Stubs\Movie.cs" />
