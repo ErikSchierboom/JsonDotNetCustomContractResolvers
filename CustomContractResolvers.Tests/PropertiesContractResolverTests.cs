@@ -207,6 +207,35 @@
             Assert.Equal("{\"Id\":12,\"Title\":\"Inception\",\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\"}}", json);
         }
 
+        [Fact]
+        public void ConvertingWithTypeWildcardAddedForPropertySerializesAllPropertiesWithSpecifiedPropertyName()
+        {
+            // Arrange
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.Properties.Add("*.Title");
+
+            // Act
+            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
+
+            // Assert
+            Assert.Equal("{\"Id\":12,\"Title\":\"Inception\",\"Director\":{}}", json);
+        }
+
+        [Fact]
+        public void ConvertingWithTypeWildcardAddedForNestedPropertySerializesAllPropertiesForSpecifiedNestedProperty()
+        {
+            // Arrange
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.Properties.Add("*.Id");
+            customPropertiesContractResolver.Properties.Add("Director");
+
+            // Act
+            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
+
+            // Assert
+            Assert.Equal("{\"Id\":12,,\"Director\":{\"Id\":77}}", json);
+        }
+
         [Theory]
         [InlineData("Movie.Id")]
         [InlineData("MOVIE.Id")]
@@ -357,6 +386,34 @@
 
             // Assert
             Assert.Equal("{\"Id\":12,\"Title\":\"Inception\",\"Director\":{}}", json);
+        }
+
+        [Fact]
+        public void ConvertingWithExcludePropertiesTypeWildcardAddedForPropertySerializesAllPropertiesForSpecifiedProperty()
+        {
+            // Arrange
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.ExcludeProperties.Add("*.Title");
+
+            // Act
+            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
+
+            // Assert
+            Assert.Equal("{\"Id\":12,\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\"}}", json);
+        }
+
+        [Fact]
+        public void ConvertingWithExcludePropertiesTypeWildcardAddedForNestedPropertySerializesAllPropertiesForSpecifiedNestedProperty()
+        {
+            // Arrange
+            var customPropertiesContractResolver = new PropertiesContractResolver();
+            customPropertiesContractResolver.ExcludeProperties.Add("*.Id");
+
+            // Act
+            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
+
+            // Assert
+            Assert.Equal("{\"Title\":\"Inception\",\"Director\":{\"Name\":\"Christopher Nolan\"}}", json);
         }
 
         [Fact]
