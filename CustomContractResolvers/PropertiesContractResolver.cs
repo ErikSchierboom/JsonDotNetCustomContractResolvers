@@ -108,8 +108,14 @@ namespace JsonDotNet.CustomContractResolvers
         private static bool PropertiesContainsProperty(ICollection<string> properties, JsonProperty jsonProperty)
         {
             return properties.Contains(Wildcard) ||
+                   properties.Contains(GetWildcardForType(jsonProperty)) ||
                    properties.Contains(GetWildcardForProperty(jsonProperty)) ||
                    properties.Contains(GetFullName(jsonProperty));
+        }
+
+        private static string GetWildcardForType(JsonProperty jsonProperty)
+        {
+            return GetFullNameForTypeProperty(Wildcard, jsonProperty.PropertyName);
         }
 
         private static string GetWildcardForProperty(JsonProperty jsonProperty)
@@ -124,7 +130,12 @@ namespace JsonDotNet.CustomContractResolvers
 
         private static string GetFullNameForTypeProperty(MemberInfo declaringType, string propertyName)
         {
-            return declaringType.Name + PropertyTypeAndNameSeparator + propertyName;
+            return GetFullNameForTypeProperty(declaringType.Name, propertyName);
+        }
+
+        private static string GetFullNameForTypeProperty(string declaringTypeName, string propertyName)
+        {
+            return declaringTypeName + PropertyTypeAndNameSeparator + propertyName;
         }
 
         private void SerializeAllProperties()

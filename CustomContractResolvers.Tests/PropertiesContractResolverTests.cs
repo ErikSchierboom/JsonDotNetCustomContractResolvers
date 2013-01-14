@@ -218,7 +218,7 @@
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
 
             // Assert
-            Assert.Equal("{\"Id\":12,\"Title\":\"Inception\",\"Director\":{}}", json);
+            Assert.Equal("{\"Title\":\"Inception\"}", json);
         }
 
         [Fact]
@@ -233,7 +233,7 @@
             var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
 
             // Assert
-            Assert.Equal("{\"Id\":12,,\"Director\":{\"Id\":77}}", json);
+            Assert.Equal("{\"Id\":12,\"Director\":{\"Id\":77}}", json);
         }
 
         [Theory]
