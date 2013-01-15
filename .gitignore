@@ -1,10 +1,5 @@
 # git ignore file
-packages
-bin
-obj
-JsonDotNetCustomContractResolvers.sln.DotSettings
-JsonDotNetCustomContractResolvers.sln.DotSettings.user
 *.nupkg
-JsonDotNetCustomContractResolvers.v11.suo
+*.sln.DotSettings*
 *.suo
-*.suo
+packages
