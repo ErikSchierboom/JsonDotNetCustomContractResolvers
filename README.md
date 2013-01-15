@@ -79,6 +79,20 @@ To make things even easier, it is also possible to use wildcards for property na
     propertiesContractResolver.ExcludeProperties.Add("Movie.*");
 ```
 
+You can also use a wildcard for property types For example, if you want to return the Id property of all types you can do:
+
+```c#
+    var propertiesContractResolver = new PropertiesContractResolver();
+    propertiesContractResolver.Properties.Add("*.Id");
+```
+
+Finally, there is also a wildcard that matches all properties. This way you can exclude all properties as follows:
+
+```c#
+    var propertiesContractResolver = new PropertiesContractResolver();
+    propertiesContractResolver.Properties.Add("*");
+```
+
 ## Combining properties in a single string
 It is possible to specify multiple properties in a single string. The properties in that string must be comma- or space separated. The following two statement blocks are semantically equivalent:
 
@@ -126,8 +140,15 @@ The library is available on NuGet package available. You can install it using th
      <th>Changes</th>
   </tr>
   <tr>
+     <td>2013-01-15</td>
+     <td>1.1.1</td>
+     <td>
+        Added support for type wildcards.
+     </td>
+  </tr>
+  <tr>
      <td>2013-01-12</td>
-     <td>1.1</td>
+     <td>1.1.0</td>
      <td>
         Properties and exclude properties can be set in the constructor of the PropertiesContractResolver class.
         Properties and exclude properties can be set through comma- and space-separated strings.
