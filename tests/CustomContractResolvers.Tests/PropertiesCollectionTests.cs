@@ -294,6 +294,19 @@
         }
 
         [Fact]
+        public void ToStringWithNoPropertiesAddedReturnsEmptyString()
+        {
+            // Arrange
+            var propertiesCollection = new PropertiesCollection();
+
+            // Act
+            var propertiesCollectionAsString = propertiesCollection.ToString();
+
+            // Assert
+            Assert.Equal(string.Empty, propertiesCollectionAsString);
+        }
+
+        [Fact]
         public void ToStringWithSinglePropertyAddedReturnsThatProperty()
         {
             // Arrange
