@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>
-        Added support for type wildcards.
+        ToString on PropertiesCollection returns properties in format that can also be used as input for PropertiesCollection.
     </releaseNotes>
     <copyright>Copyright 2013</copyright>
     <tags>JSON.NET JSON ContractResolver Properties Exclude</tags>
