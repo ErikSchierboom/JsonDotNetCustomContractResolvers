@@ -292,5 +292,34 @@
             // Assert
             Assert.False(added);
         }
+
+        [Fact]
+        public void ToStringWithSinglePropertyAddedReturnsThatProperty()
+        {
+            // Arrange
+            var propertiesCollection = new PropertiesCollection();
+            propertiesCollection.Add("Movie.Id");
+
+            // Act
+            var propertiesCollectionAsString = propertiesCollection.ToString();
+
+            // Assert
+            Assert.Equal("Movie.Id", propertiesCollectionAsString);
+        }
+
+        [Fact]
+        public void ToStringWithSinglePropertyAddedReturnsPropertiesSeparatedByCommas()
+        {
+            // Arrange
+            var propertiesCollection = new PropertiesCollection();
+            propertiesCollection.Add("Movie.Id");
+            propertiesCollection.Add("Movie.Title");
+
+            // Act
+            var propertiesCollectionAsString = propertiesCollection.ToString();
+
+            // Assert
+            Assert.Equal("Movie.Id,Movie.Title", propertiesCollectionAsString);
+        }
     }
 }
