@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Runtime.Serialization;
 
@@ -33,6 +34,11 @@
         public new bool Add(string item)
         {
             return ParseProperties(item).Aggregate(false, (current, property) => current | base.Add(property));
+        }
+
+        public override string ToString()
+        {
+            return string.Join(CommaSeparator.ToString(CultureInfo.InvariantCulture), this);
         }
 
         private static IEnumerable<string> ParseProperties(string properties)
