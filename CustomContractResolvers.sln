@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomContractResolvers", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomContractResolvers.Tests", "tests\CustomContractResolvers.Tests\CustomContractResolvers.Tests.csproj", "{6D9AAE3B-B024-48A5-9CFE-C8009D9578FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomContractResolvers.Samples.Console", "CustomContractResolvers.Samples.Console\CustomContractResolvers.Samples.Console.csproj", "{8ACC6F2C-71ED-4482-A768-5470397447AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomContractResolvers.Samples.Console", "samples\CustomContractResolvers.Samples.Console\CustomContractResolvers.Samples.Console.csproj", "{8ACC6F2C-71ED-4482-A768-5470397447AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

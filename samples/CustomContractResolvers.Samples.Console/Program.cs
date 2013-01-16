@@ -1,41 +1,42 @@
 ﻿namespace JsonDotNet.CustomContractResolvers.Samples.Console
 {
     using System;
+    using System.Collections.Generic;
+
+    using JsonDotNet.CustomContractResolvers.Samples.Console.Examples;
 
     internal class Program
     {
         private static void Main()
         {
             ShowExplanation();
-            ShowSimpleUsage();
-            ShowPropertyWildcardUsage();
-            ShowTypeWildcardUsage();
-            ShowGeneralWildcardUsage();
+
+            foreach (var example in GetExamples())
+            {
+                example.ShowUsage();
+            }
         }
 
         private static void ShowExplanation()
         {
-            Console.WriteLine("This console application will show how the CustomPropertyContractResolver class can be used.");
+            Console.WriteLine("This console application will show how the [PropertiesContractResolver] class can be used.");
+            Console.WriteLine("");
+            Console.WriteLine("Press any key to start showing the first example.");
+            Console.ReadKey();
         }
 
-        private static void ShowSimpleUsage()
+        private static IEnumerable<Example> GetExamples()
         {
-            // TODO: show example
-        }
-
-        private static void ShowPropertyWildcardUsage()
-        {
-            // TODO: show example
-        }
-
-        private static void ShowTypeWildcardUsage()
-        {
-            // TODO: show example
-        }
-
-        private static void ShowGeneralWildcardUsage()
-        {
-            // TODO: show example
+            return new List<Example>
+                       {
+                           new SimpleExample(),
+                           new SimpleExcludeExample(),
+                           new ExplicitTypeExample(),
+                           new NesterPropertiesExample(),
+                           new PropertyWildcardExample(),
+                           new TypeWildcardExample(),
+                           new GeneralWildcardExample()
+                       };
         }
     }
 }

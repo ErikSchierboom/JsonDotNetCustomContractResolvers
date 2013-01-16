@@ -35,17 +35,27 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="JsonDotNet.CustomContractResolvers">
-      <HintPath>..\packages\JsonDotNet.CustomContractResolvers.1.1.1\lib\net40\JsonDotNet.CustomContractResolvers.dll</HintPath>
+      <HintPath>..\..\packages\JsonDotNet.CustomContractResolvers.1.1.1\lib\net40\JsonDotNet.CustomContractResolvers.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Director.cs" />
+    <Compile Include="Examples\Example.cs" />
+    <Compile Include="Examples\ExplicitTypeExample.cs" />
+    <Compile Include="Examples\GeneralWildcardExample.cs" />
+    <Compile Include="Models\Movie.cs" />
+    <Compile Include="Examples\NesterPropertiesExample.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Examples\PropertyWildcardExample.cs" />
+    <Compile Include="Examples\SimpleExcludeExample.cs" />
+    <Compile Include="Examples\SimpleExample.cs" />
+    <Compile Include="Examples\TypeWildcardExample.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
