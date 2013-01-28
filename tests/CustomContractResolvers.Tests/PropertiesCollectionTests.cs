@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using Xunit;
+    using Xunit.Extensions;
 
     public class PropertiesCollectionTests
     {
@@ -210,41 +211,64 @@
         }
 
         [Fact]
-        public void AddWithCommaSeparatedStringWillExtractAllPropertiesFromTheStringAndAddThem()
+        public void AddWithSinglePropertyIgnoresWhiteSpace()
         {
             // Arrange
             var propertiesCollection = new PropertiesCollection();
 
             // Act
-            propertiesCollection.Add("Movie.Id, Movie.Title");
+            propertiesCollection.Add(" Movie.Id ");
+
+            // Assert
+            Assert.True(propertiesCollection.Contains("Movie.Id"));
+        }
+
+        [Theory]
+        [InlineData("Movie.Id,Movie.Title")]
+        [InlineData("Movie.Id, Movie.Title")]
+        [InlineData("Movie.Id,  Movie.Title")]
+        [InlineData(" Movie.Id,Movie.Title ")]
+        public void AddWithCommaSeparatedStringWillExtractAllPropertiesFromTheStringAndAddThem(string properties)
+        {
+            // Arrange
+            var propertiesCollection = new PropertiesCollection();
+
+            // Act
+            propertiesCollection.Add(properties);
 
             // Assert
             Assert.True(propertiesCollection.Contains("Movie.Id"));
             Assert.True(propertiesCollection.Contains("Movie.Title"));
         }
 
-        [Fact]
-        public void AddWithCommaSeparatedStringWithSpacesWillExtractAllPropertiesFromTheStringAndAddThem()
+        [Theory]
+        [InlineData("Movie.Id Movie.Title")]
+        [InlineData("Movie.Id  Movie.Title")]
+        [InlineData(" Movie.Id  Movie.Title ")]
+        public void AddWithWhiteSpaceSeparatedStringWillExtractAllPropertiesFromTheStringAndAddThem(string properties)
         {
             // Arrange
             var propertiesCollection = new PropertiesCollection();
 
             // Act
-            propertiesCollection.Add("Movie.Id, Movie.Title");
+            propertiesCollection.Add(properties);
 
             // Assert
             Assert.True(propertiesCollection.Contains("Movie.Id"));
             Assert.True(propertiesCollection.Contains("Movie.Title"));
         }
 
-        [Fact]
-        public void AddWithSpaceSeparatedStringWillExtractAllPropertiesFromTheStringAndAddThem()
+        [Theory]
+        [InlineData("Movie.Id\tMovie.Title")]
+        [InlineData("Movie.Id\t\tMovie.Title")]
+        [InlineData(" Movie.Id,\tMovie.Title ")]
+        public void AddWithTabSeparatedStringWillExtractAllPropertiesFromTheStringAndAddThem(string properties)
         {
             // Arrange
             var propertiesCollection = new PropertiesCollection();
 
             // Act
-            propertiesCollection.Add("Movie.Id Movie.Title");
+            propertiesCollection.Add(properties);
 
             // Assert
             Assert.True(propertiesCollection.Contains("Movie.Id"));

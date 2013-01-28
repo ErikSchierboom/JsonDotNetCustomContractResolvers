@@ -10,6 +10,7 @@
     {
         private const char CommaSeparator = ',';
         private const char SpaceSeparator = ' ';
+        private const char TabSeparator = '\t';
 
         public PropertiesCollection() : base(StringComparer.OrdinalIgnoreCase)
         {
@@ -48,7 +49,7 @@
                 throw new ArgumentNullException("properties");
             }
 
-            return properties.Split(CommaSeparator, SpaceSeparator).Where(p => !string.IsNullOrWhiteSpace(properties));
+            return properties.Split(CommaSeparator, SpaceSeparator, TabSeparator).Where(p => !string.IsNullOrWhiteSpace(p));
         }
     }
 }
