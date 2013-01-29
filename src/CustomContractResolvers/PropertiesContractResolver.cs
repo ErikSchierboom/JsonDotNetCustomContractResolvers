@@ -9,13 +9,16 @@ namespace JsonDotNet.CustomContractResolvers
     using Newtonsoft.Json.Serialization;
 
     /// <summary>
-    /// A contract resolver that allows the caller to specify exactly which properties are to be serialized by 
+    /// A contract resolver that allows the caller to specify exactly which properties are to be serialized by
     /// using simple strings.
     /// </summary>
     public class PropertiesContractResolver : CustomPropertyContractResolver
     {
         private const string Wildcard = "*";
         private const string PropertyTypeAndNameSeparator = ".";
+
+        private PropertiesCollection normalizedProperties;
+        private PropertiesCollection normalizedExcludeProperties;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertiesContractResolver" /> class.
@@ -31,8 +34,8 @@ namespace JsonDotNet.CustomContractResolvers
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertiesContractResolver" /> class.
         /// </summary>
-        /// <param name="properties">The properties.</param>
-        /// <param name="excludeProperties">The exclude properties.</param>
+        /// <param name="properties">The properties collection.</param>
+        /// <param name="excludeProperties">The exclude properties collection.</param>
         public PropertiesContractResolver(IEnumerable<string> properties, IEnumerable<string> excludeProperties)
         {
             this.Properties = new PropertiesCollection(properties);
@@ -62,6 +65,14 @@ namespace JsonDotNet.CustomContractResolvers
         public PropertiesCollection ExcludeProperties { get; private set; }
 
         /// <summary>
+        /// Gets or sets the property match mode.
+        /// </summary>
+        /// <value>
+        /// The property match mode.
+        /// </value>
+        public PropertyMatchMode PropertyMatchMode { get; set; }
+
+        /// <summary>
         /// Creates properties for the given <see cref="T:Newtonsoft.Json.Serialization.JsonContract" />.
         /// </summary>
         /// <param name="type">The type to create properties for.</param>
@@ -71,50 +82,27 @@ namespace JsonDotNet.CustomContractResolvers
         /// </returns>
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            NormalizeRootProperties(type, this.Properties);
-            NormalizeRootProperties(type, this.ExcludeProperties);
+            this.normalizedProperties = this.NormalizeProperties(this.Properties);
+            this.normalizedExcludeProperties = this.NormalizeProperties(this.ExcludeProperties);
+
+            if (this.NoPropertiesHaveBeenSpecified())
+            {
+                this.MarkAllPropertiesForSerialization();
+            }
 
             return base.CreateProperties(type, memberSerialization);
         }
 
         /// <summary>
-        /// Creates a <see cref="T:Newtonsoft.Json.Serialization.JsonProperty" /> for the given <see cref="T:System.Reflection.MemberInfo" />.
+        /// Returns a predicate that checks if a JSON property should be serialized.
         /// </summary>
-        /// <param name="member">The member to create a <see cref="T:Newtonsoft.Json.Serialization.JsonProperty" /> for.</param>
-        /// <param name="memberSerialization">The member's parent <see cref="T:Newtonsoft.Json.MemberSerialization" />.</param>
+        /// <param name="jsonProperty">The JSON property.</param>
         /// <returns>
-        /// A created <see cref="T:Newtonsoft.Json.Serialization.JsonProperty" /> for the given <see cref="T:System.Reflection.MemberInfo" />.
+        /// The predicate.
         /// </returns>
-        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
-        {
-            if (this.NoPropertiesHaveBeenSpecified())
-            {
-                this.SerializeAllProperties();
-            }
-
-            return base.CreateProperty(member, memberSerialization);
-        }
-
         protected override Predicate<object> ShouldSerialize(JsonProperty jsonProperty)
         {
             return i => this.PropertyIsIncluded(jsonProperty) && !this.PropertyIsExcluded(jsonProperty);
-        }
-
-        private static void NormalizeRootProperties(Type type, ISet<string> properties)
-        {
-            var rootProperties = properties.Where(IsRootProperty).ToList();
-
-            foreach (var rootProperty in rootProperties)
-            {
-                var fullNameForRootProperty = GetFullNameForTypeProperty(type, rootProperty);
-                properties.Add(fullNameForRootProperty);
-                properties.Remove(rootProperty);
-            }
-        }
-
-        private static bool IsRootProperty(string p)
-        {
-            return p != Wildcard && !p.Contains(PropertyTypeAndNameSeparator);
         }
 
         private static bool PropertiesContainsProperty(ICollection<string> properties, JsonProperty jsonProperty)
@@ -150,24 +138,47 @@ namespace JsonDotNet.CustomContractResolvers
             return declaringTypeName + PropertyTypeAndNameSeparator + propertyName;
         }
 
-        private void SerializeAllProperties()
+        private static IEnumerable<string> AddTypeWildcardToNameOnlyProperties(PropertiesCollection properties)
         {
-            this.Properties.Add(Wildcard);
+            var propertiesWithNameOnly = properties.Where(IsNameOnlyProperty);
+            var propertiesWithWilcardAsType = propertiesWithNameOnly.Select(p => GetFullNameForTypeProperty(Wildcard, p));
+
+            return properties.Except(propertiesWithNameOnly).Union(propertiesWithWilcardAsType);
+        }
+
+        private static bool IsNameOnlyProperty(string p)
+        {
+            return p != Wildcard && !p.Contains(PropertyTypeAndNameSeparator);
+        }
+
+        private PropertiesCollection NormalizeProperties(PropertiesCollection properties)
+        {
+            if (this.PropertyMatchMode == PropertyMatchMode.Name)
+            {
+                return new PropertiesCollection(AddTypeWildcardToNameOnlyProperties(properties));
+            }
+
+            return properties;
+        }
+
+        private void MarkAllPropertiesForSerialization()
+        {
+            this.normalizedProperties.Add(Wildcard);
         }
 
         private bool NoPropertiesHaveBeenSpecified()
         {
-            return !this.Properties.Any();
+            return !this.normalizedProperties.Any();
         }
 
         private bool PropertyIsIncluded(JsonProperty jsonProperty)
         {
-            return PropertiesContainsProperty(this.Properties, jsonProperty);
+            return PropertiesContainsProperty(this.normalizedProperties, jsonProperty);
         }
 
         private bool PropertyIsExcluded(JsonProperty jsonProperty)
         {
-            return PropertiesContainsProperty(this.ExcludeProperties, jsonProperty);
+            return PropertiesContainsProperty(this.normalizedExcludeProperties, jsonProperty);
         }
     }
 }

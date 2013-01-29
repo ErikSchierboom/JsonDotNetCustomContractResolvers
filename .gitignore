@@ -3,3 +3,4 @@
 *.sln.DotSettings*
 *.suo
 packages
+StyleCop.Cache
