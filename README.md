@@ -19,13 +19,13 @@ If we serialize an instance of this class using JSON.NET and the default setting
 ```json
     {"Id":12,"Title":"Inception","Director":"Christopher Nolan"}
 ```
-Now suppose that we do not want to serialize the Id property. We can do this by plugging-in the PropertiesContractResolver. The PropertiesContractResolver has a property named ExcludeProperties that contains a set of property names that are to be excluded from serialization. The property names have the format: **"{DeclaringTypeName}.{PropertyName}"**. In our example, the Id field's property name is: **"Movie.Id"**.
+Now suppose that we do not want to serialize the Id property. We can do this by plugging-in the PropertiesContractResolver. The PropertiesContractResolver has a property named ExcludeProperties that contains a set of property names that are to be excluded from serialization. 
 
-To exclude the Id field, we first need to create an instance of the PropertiesContractResolver class and add **"Movie.Id"** to the ExcludeProperties property:
+To exclude the Id field, we first need to create an instance of the PropertiesContractResolver class and add **"Id"** to the ExcludeProperties property:
 
 ```c#
     var propertiesContractResolver = new PropertiesContractResolver();
-    propertiesContractResolver.ExcludeProperties.Add("Movie.Id");
+    propertiesContractResolver.ExcludeProperties.Add("Id");
 ```
 
 Then we need to create a JsonSerializerSettings instance and set its ContractResolver to our PropertiesContractResolver instance:
@@ -48,8 +48,8 @@ Of course, we could have also approached this the other way around by specifying
 
 ```c#
     var propertiesContractResolver = new PropertiesContractResolver();
-    propertiesContractResolver.Properties.Add("Movie.Title");
-    propertiesContractResolver.Properties.Add("Movie.Director");
+    propertiesContractResolver.Properties.Add("Title");
+    propertiesContractResolver.Properties.Add("Director");
 ```
 
 This will reult in the same output:
@@ -58,17 +58,28 @@ This will reult in the same output:
     {"Title":"Inception","Director":"Christopher Nolan"}
 ```
 
-You can also use a combination of properties to return and properties to exclude.
+You can also use a combination of properties to return and properties to exclude. The way this works is that first the properties to be returned are filtered, and then we see which of those properties needs to be excluded.
 
-## Properties on root type
-The most important properties are often the properties on the root type that is to be serialized. For those properties, you do not need to specify the type. Therefore, we can modify our earlier example as follows:
+## Property match mode
+The previous example only looked at the property name to see if a property matched. However, it is also possible to have properties only match when their combination of property name and type matches. This allows you to be even more specific on what properties to include or exclude. To use this explicit type matching, you have to set the `PropertyMatchMode` property to `PropertyMatchMode.NameAndType` (the default is `PropertyMatchMode.Name`):
 ```c#
-    propertiesContractResolver.Properties.Add("Title");
-    propertiesContractResolver.Properties.Add("Director");
+    var propertiesContractResolver = new PropertiesContractResolver();
+    propertiesContractResolver.PropertyMatchMode = PropertyMatchMode.NameAndType;
+```
+Now properties will only match when both the property name and type are equal to the specified properties. Of course, this also means that you have to specify the type when adding properties. Explicit property names have the format: **"{DeclaringTypeName}.{PropertyName}"**. 
 
-    // which is equivalent to ...
-    propertiesContractResolver.Properties.Add("Movie.Title");
-    propertiesContractResolver.Properties.Add("Movie.Director");
+We can see how this works, by returning to our previous example where we want to exclude the Id property. If we do not change anything, the property will not be excluded as we did not specify a type:
+```c#
+    propertiesContractResolver.ExcludeProperties.Add("Id");
+
+    // This will serialize to: {"Id":12,"Title":"Inception","Director":"Christopher Nolan"}
+```
+
+However, if we add the property type, everything works fine:
+```c#
+    propertiesContractResolver.ExcludeProperties.Add("Movie.Id");
+
+    // This will serialize to: {"Title":"Inception","Director":"Christopher Nolan"}
 ```
 
 ## Wildcards
@@ -94,7 +105,7 @@ Finally, there is also a wildcard that matches all properties. This way you can 
 ```
 
 ## Combining properties in a single string
-It is possible to specify multiple properties in a single string. The properties in that string must be comma- or space separated. The following two statement blocks are semantically equivalent:
+It is possible to specify multiple properties in a single string. The properties in that string must be comma-, space or tab-separated. The following two statement blocks are semantically equivalent:
 
 ```c#
     // Combined properties version
@@ -127,6 +138,25 @@ To make it more easier to set the properties on an instance of the PropertiesCon
     propertiesContractResolver.Properties.Add("Director");
 ```
 
+## Serializing properties collection
+The properties collection class has its `ToString` method overloaded to return the properties in a string format. This can be convenient when you want to store the serialized properties. An short example will show how this works:
+
+```c#
+    // Create the properties collection
+    var properties = new PropertiesCollection();
+
+    // then add the properties
+    properties.Add("Title");
+    properties.Add("Director");
+
+    // then convert the properties to their string format
+    var propertiesAsString = properties.ToString(); // Returns "Title,Director"
+    
+    // we can now create a new properties collection 
+    var propertiesFromString = new PropertiesCollection(propertiesAsString);
+    propertiesFromString.SetEquals(properties); // This returns true
+```
+
 ## Get it on NuGet!
 The library is available on NuGet package available. You can install it using the following command:
 
@@ -140,6 +170,15 @@ The library is available on NuGet package available. You can install it using th
      <th>Changes</th>
   </tr>
   <tr>
+     <td>2013-01-29</td>
+     <td>1.1.2</td>
+     <td>
+        Added option to specify property match mode (name only matching or property name and type matching).<br/>
+        ToString on PropertiesCollection returns properties in format that can also be used as input for PropertiesCollection.<br/>
+        Allow properties to be separated by tabs.
+     </td>
+  </tr>
+  <tr>
      <td>2013-01-15</td>
      <td>1.1.1</td>
      <td>
@@ -150,8 +189,8 @@ The library is available on NuGet package available. You can install it using th
      <td>2013-01-12</td>
      <td>1.1.0</td>
      <td>
-        Properties and exclude properties can be set in the constructor of the PropertiesContractResolver class.
-        Properties and exclude properties can be set through comma- and space-separated strings.
+        Properties and exclude properties can be set in the constructor of the PropertiesContractResolver class.<br/>
+        Properties and exclude properties can be set through comma- and space-separated strings.<br/>
         Properties on the root now do not require the root type to be specified.
      </td>
   </tr>
