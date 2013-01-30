@@ -12,7 +12,6 @@
         /// <value>
         /// The JSON string.
         /// </value>
-        [Required]
         public string Json { get; set; }
 
         /// <summary>
@@ -29,7 +28,17 @@
         /// <value>
         /// The properties to exclude.
         /// </value>
+        [Display(Name = "Exclude properties")]
         public string ExcludeProperties { get; set; }
+
+        /// <summary>
+        /// Gets or sets the property match mode.
+        /// </summary>
+        /// <value>
+        /// The property match mode.
+        /// </value>
+        [Display(Name = "Property match mode")]
+        public PropertyMatchMode PropertyMatchMode { get; set; }
         
         /// <summary>
         /// Gets or sets the resulting serialized JSON.
@@ -38,13 +47,5 @@
         /// The serialized json.
         /// </value>
         public string JsonSerializationResult { get; set; }
-
-        /// <summary>
-        /// Gets or sets the property match mode.
-        /// </summary>
-        /// <value>
-        /// The property match mode.
-        /// </value>
-        public PropertyMatchMode PropertyMatchMode { get; set; }
     }
 }

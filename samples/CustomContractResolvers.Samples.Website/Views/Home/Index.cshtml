@@ -1,4 +1,5 @@
-﻿@model JsonDotNet.CustomContractResolvers.Samples.Website.ViewModels.Home.IndexViewModel
+﻿@using JsonDotNet.CustomContractResolvers
+@model JsonDotNet.CustomContractResolvers.Samples.Website.ViewModels.Home.IndexViewModel
 
 @{
     ViewBag.Title = "PropertiesContractResolver tester";
@@ -18,8 +19,7 @@
                 @Html.LabelFor(m => m.Json)
             </div>
             <div class="editor-field">
-                @Html.TextBoxFor(m => m.Json)
-                @Html.ValidationMessageFor(m => m.Json)
+                @Html.DisplayFor(m => m.Json)
             </div>
 
             <div class="editor-label">
@@ -42,7 +42,7 @@
                 @Html.LabelFor(m => m.PropertyMatchMode)
             </div>
             <div class="editor-field">
-                @Html.TextBoxFor(m => m.PropertyMatchMode)
+                @Html.DropDownListFor(model => model.PropertyMatchMode, new SelectList(Enum.GetValues(typeof(PropertyMatchMode))))
                 @Html.ValidationMessageFor(m => m.PropertyMatchMode)
             </div>
 
@@ -51,6 +51,17 @@
             </p>
         </fieldset>
     </div>
+}
+
+@if (Model.JsonSerializationResult != null)
+{
+    <h2>
+        JSON serialization result:
+    </h2>
+    
+    <pre>
+        @Model.JsonSerializationResult
+    </pre>
 }
 
 @section scripts

@@ -3,6 +3,7 @@
     using System.Web.Mvc;
 
     using JsonDotNet.CustomContractResolvers;
+    using JsonDotNet.CustomContractResolvers.Samples.Website.Models;
     using JsonDotNet.CustomContractResolvers.Samples.Website.ViewModels.Home;
 
     using Newtonsoft.Json;
@@ -12,10 +13,9 @@
         [HttpGet]
         public ActionResult Index()
         {
-            var model = new IndexViewModel();
-
-            // Use a default JSON string
-            model.Json = "{\"Id\":12,\"Title\":\"Inception\",\"Director\":\"Christopher Nolan\"}";
+            var movie = CreateMovieToSerialize();
+            var movieAsJson = JsonConvert.SerializeObject(movie);
+            var model = new IndexViewModel { Json = movieAsJson };
 
             return this.View(model);
         }
@@ -25,24 +25,46 @@
         {
             if (this.ModelState.IsValid)
             {
-                // Create a PropertiesContractResolver instance using the specified properties
-                // and exclude properties values
+                // Create a PropertiesContractResolver instance
                 var propertiesContractResolver = new PropertiesContractResolver();
-                propertiesContractResolver.Properties.Add(model.Properties);
-                propertiesContractResolver.ExcludeProperties.Add(model.ExcludeProperties);
+
+                // Set the properties, exclude properties and property match mode to the values specified by the user
+                propertiesContractResolver.Properties.Add(model.Properties ?? string.Empty);
+                propertiesContractResolver.ExcludeProperties.Add(model.ExcludeProperties ?? string.Empty);
+                propertiesContractResolver.PropertyMatchMode = model.PropertyMatchMode;
 
                 // Create a JsonSerializerSettings instance that uses our PropertiesContractResolver instance
                 // to resolve contracts (thereby influencing the generated JSON)
                 var serializerSettings = new JsonSerializerSettings { ContractResolver = propertiesContractResolver };
 
-                // Create an object from the specified JSON
-                var deserializeObject = JsonConvert.DeserializeObject(model.Json);
+                // Create the object to serialize
+                var movieToSerialize = CreateMovieToSerialize();
 
                 // Convert the object using our PropertiesContractResolver instance 
-                model.JsonSerializationResult = JsonConvert.SerializeObject(deserializeObject, serializerSettings);
+                model.JsonSerializationResult = JsonConvert.SerializeObject(movieToSerialize, serializerSettings);
             }
 
             return this.View(model);
+        }
+
+        private static Movie CreateMovieToSerialize()
+        {
+            return new Movie
+            {
+                Id = 12,
+                Title = "Inception",
+                Director = CreateDirectorToSerialize()
+            };
+        }
+
+        private static Director CreateDirectorToSerialize()
+        {
+            return new Director
+            {
+                Id = 12,
+                Name = "Christopher Nolan",
+                Age = 48,
+            };
         }
     }
 }
