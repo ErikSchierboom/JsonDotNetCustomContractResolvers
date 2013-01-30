@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomContractResolvers.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomContractResolvers.Samples.Console", "samples\CustomContractResolvers.Samples.Console\CustomContractResolvers.Samples.Console.csproj", "{8ACC6F2C-71ED-4482-A768-5470397447AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomContractResolvers.Samples.Website", "Samples\CustomContractResolvers.Samples.Website\CustomContractResolvers.Samples.Website.csproj", "{540D0C12-4DB5-4780-AC1B-D39A91AA0C9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{8ACC6F2C-71ED-4482-A768-5470397447AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8ACC6F2C-71ED-4482-A768-5470397447AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8ACC6F2C-71ED-4482-A768-5470397447AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{540D0C12-4DB5-4780-AC1B-D39A91AA0C9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{540D0C12-4DB5-4780-AC1B-D39A91AA0C9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{540D0C12-4DB5-4780-AC1B-D39A91AA0C9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{540D0C12-4DB5-4780-AC1B-D39A91AA0C9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
