@@ -9,19 +9,7 @@
     public class PropertiesCollectionTests
     {
         [Fact]
-        public void DefaultConstructorWillSetComparerToOrdinalIgnoreCaseStringComparer()
-        {
-            // Arrange
-            var propertiesCollection = new PropertiesCollection();
-
-            // Act
-
-            // Assert
-            Assert.Same(StringComparer.OrdinalIgnoreCase, propertiesCollection.Comparer);
-        }
-
-        [Fact]
-        public void ConstructorWithEnumerableParameterIsNullInstanceThrowsArgumentNullException()
+        public void ConstructorWithNullEnumerableParameterThrowsArgumentNullException()
         {
             // Arrange
             IEnumerable<string> collection = null;
@@ -33,7 +21,7 @@
         }
 
         [Fact]
-        public void ConstructorWithNullInstanceThrowsArgumentNullException()
+        public void ConstructorWithNullStringParameterThrowsArgumentNullException()
         {
             // Arrange
             string collection = null;
@@ -42,6 +30,18 @@
 
             // Assert
             Assert.Throws<ArgumentNullException>(() => new PropertiesCollection(collection));
+        }
+
+        [Fact]
+        public void DefaultConstructorWillSetComparerToOrdinalIgnoreCaseStringComparer()
+        {
+            // Arrange
+            var propertiesCollection = new PropertiesCollection();
+
+            // Act
+
+            // Assert
+            Assert.Same(StringComparer.OrdinalIgnoreCase, propertiesCollection.Comparer);
         }
 
         [Fact]
@@ -56,11 +56,15 @@
             Assert.Same(StringComparer.OrdinalIgnoreCase, propertiesCollection.Comparer);
         }
 
-        [Fact]
-        public void ConstructorWithEmptyStringWillNotAddAnyProperties()
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\t")]
+        [InlineData("\n")]
+        public void ConstructorWithStringParameterIsWhitespaceStringWillNotAddAnyProperties(string whiteSpaceProperties)
         {
             // Arrange
-            var propertiesCollection = new PropertiesCollection(string.Empty);
+            var propertiesCollection = new PropertiesCollection(whiteSpaceProperties);
 
             // Act
 
@@ -68,49 +72,15 @@
             Assert.Equal(0, propertiesCollection.Count);
         }
 
-        [Fact]
-        public void ConstructorWithStringParameterIsWhitespaceStringWillNotAddAnyProperties()
+        [Theory]
+        [InlineData("Movie.Id,Movie.Title")]
+        [InlineData("Movie.Id, Movie.Title")]
+        [InlineData("Movie.Id Movie.Title")]
+        [InlineData("Movie.Id\tMovie.Title")]
+        public void ConstructorWithStringParameterWillExtractAllPropertiesFromTheStringAndAddThemIndividually(string properties)
         {
             // Arrange
-            var propertiesCollection = new PropertiesCollection(" \t\n ");
-
-            // Act
-
-            // Assert
-            Assert.Equal(0, propertiesCollection.Count);
-        }
-
-        [Fact]
-        public void ConstructorWithStringParameterIsCommaSeparatedStringWillExtractAllPropertiesFromTheStringAndAddThem()
-        {
-            // Arrange
-            var propertiesCollection = new PropertiesCollection("Movie.Id,Movie.Title");
-
-            // Act
-
-            // Assert
-            Assert.True(propertiesCollection.Contains("Movie.Id"));
-            Assert.True(propertiesCollection.Contains("Movie.Title"));
-        }
-
-        [Fact]
-        public void ConstructorWithStringParameterIsCommaSeparatedStringWithSpacesWillExtractAllPropertiesFromTheStringAndAddThem()
-        {
-            // Arrange
-            var propertiesCollection = new PropertiesCollection("Movie.Id, Movie.Title");
-
-            // Act
-
-            // Assert
-            Assert.True(propertiesCollection.Contains("Movie.Id"));
-            Assert.True(propertiesCollection.Contains("Movie.Title"));
-        }
-
-        [Fact]
-        public void ConstructorWithStringParameterIsSpaceSeparatedStringWillExtractAllPropertiesFromTheStringAndAddThem()
-        {
-            // Arrange
-            var propertiesCollection = new PropertiesCollection("Movie.Id Movie.Title");
+            var propertiesCollection = new PropertiesCollection(properties);
 
             // Act
 
@@ -144,27 +114,18 @@
             Assert.Throws<ArgumentNullException>(() => propertiesCollection.Add(collection));
         }
 
-        [Fact]
-        public void AddWithEmptyStringWillNotAddAnyProperties()
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\t")]
+        [InlineData("\n")]
+        public void AddWithWhiteSpaceStringWillNotAddAnyProperties(string whiteSpaceProperty)
         {
             // Arrange
             var propertiesCollection = new PropertiesCollection();
 
             // Act
-            propertiesCollection.Add(string.Empty);
-
-            // Assert
-            Assert.Equal(0, propertiesCollection.Count);
-        }
-
-        [Fact]
-        public void AddWithWhitespaceStringWillNotAddAnyProperties()
-        {
-            // Arrange
-            var propertiesCollection = new PropertiesCollection();
-
-            // Act
-            propertiesCollection.Add(" \t\n ");
+            propertiesCollection.Add(whiteSpaceProperty);
 
             // Assert
             Assert.Equal(0, propertiesCollection.Count);
@@ -226,43 +187,9 @@
         [Theory]
         [InlineData("Movie.Id,Movie.Title")]
         [InlineData("Movie.Id, Movie.Title")]
-        [InlineData("Movie.Id,  Movie.Title")]
-        [InlineData(" Movie.Id,Movie.Title ")]
-        public void AddWithCommaSeparatedStringWillExtractAllPropertiesFromTheStringAndAddThem(string properties)
-        {
-            // Arrange
-            var propertiesCollection = new PropertiesCollection();
-
-            // Act
-            propertiesCollection.Add(properties);
-
-            // Assert
-            Assert.True(propertiesCollection.Contains("Movie.Id"));
-            Assert.True(propertiesCollection.Contains("Movie.Title"));
-        }
-
-        [Theory]
         [InlineData("Movie.Id Movie.Title")]
-        [InlineData("Movie.Id  Movie.Title")]
-        [InlineData(" Movie.Id  Movie.Title ")]
-        public void AddWithWhiteSpaceSeparatedStringWillExtractAllPropertiesFromTheStringAndAddThem(string properties)
-        {
-            // Arrange
-            var propertiesCollection = new PropertiesCollection();
-
-            // Act
-            propertiesCollection.Add(properties);
-
-            // Assert
-            Assert.True(propertiesCollection.Contains("Movie.Id"));
-            Assert.True(propertiesCollection.Contains("Movie.Title"));
-        }
-
-        [Theory]
         [InlineData("Movie.Id\tMovie.Title")]
-        [InlineData("Movie.Id\t\tMovie.Title")]
-        [InlineData(" Movie.Id,\tMovie.Title ")]
-        public void AddWithTabSeparatedStringWillExtractAllPropertiesFromTheStringAndAddThem(string properties)
+        public void AddWillExtractAllPropertiesFromTheStringAndAddThemIndividually(string properties)
         {
             // Arrange
             var propertiesCollection = new PropertiesCollection();
@@ -274,7 +201,7 @@
             Assert.True(propertiesCollection.Contains("Movie.Id"));
             Assert.True(propertiesCollection.Contains("Movie.Title"));
         }
-
+        
         [Fact]
         public void AddWithAllPropertiesDidNotExistsReturnsTrue()
         {
@@ -345,7 +272,7 @@
         }
 
         [Fact]
-        public void ToStringWithSinglePropertyAddedReturnsPropertiesSeparatedByCommas()
+        public void ToStringWithMultiplePropertiesAddedReturnsPropertiesSeparatedByCommas()
         {
             // Arrange
             var propertiesCollection = new PropertiesCollection();

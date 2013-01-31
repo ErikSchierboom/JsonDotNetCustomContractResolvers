@@ -12,7 +12,7 @@
     public class CustomPropertyContractResolverTests
     {
         [Fact]
-        public void ConvertingWithPropertiesContainsOneFieldOnlySerializesSpecifiedField()
+        public void ShouldSerializeMethodUsedWhenObjectIsSerialized()
         {
             // Arrange
             var customPropertiesContractResolver = new TestableCustomPropertyContractResolver();

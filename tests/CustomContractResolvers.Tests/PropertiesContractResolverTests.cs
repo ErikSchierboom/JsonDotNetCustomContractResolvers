@@ -15,7 +15,7 @@
     public class PropertiesContractResolverTests
     {
         [Fact]
-        public void ConstructorWithPropertiesCollectionSetToNullThrowsArgumentNullException()
+        public void ConstructorWithNullPropertiesCollectionThrowsArgumentNullException()
         {
             // Arrange
             IEnumerable<string> properties = null;
@@ -27,7 +27,7 @@
         }
 
         [Fact]
-        public void ConstructorWithExcludePropertiesCollectionSetToNullThrowsArgumentNullException()
+        public void ConstructorWithNullExcludePropertiesCollectionThrowsArgumentNullException()
         {
             // Arrange
             IEnumerable<string> excludeProperties = null;
@@ -39,7 +39,7 @@
         }
 
         [Fact]
-        public void ConstructorWithPropertiesSetToNullStringThrowsArgumentNullException()
+        public void ConstructorWithNullPropertiesStringThrowsArgumentNullException()
         {
             // Arrange
             string properties = null;
@@ -51,7 +51,7 @@
         }
 
         [Fact]
-        public void ConstructorWithExcludePropertiesSetToNullStringThrowsArgumentNullException()
+        public void ConstructorWithNullExcludePropertiesStringThrowsArgumentNullException()
         {
             // Arrange
             string excludeProperties = null;
@@ -62,11 +62,14 @@
             Assert.Throws<ArgumentNullException>(() => new PropertiesContractResolver(excludeProperties: excludeProperties));
         }
 
-        [Fact]
-        public void ConstructorWithPropertiesSetToEmptyStringSetsPropertiesToEmptySet()
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\t")]
+        public void ConstructorWithWhiteSpacePropertiesStringSetsPropertiesToEmptySet(string whiteSpaceProperties)
         {
             // Arrange
-            var propertiesContractResolver = new PropertiesContractResolver(properties: string.Empty);
+            var propertiesContractResolver = new PropertiesContractResolver(properties: whiteSpaceProperties);
 
             // Act
 
@@ -74,11 +77,14 @@
             Assert.False(propertiesContractResolver.Properties.Any());
         }
 
-        [Fact]
-        public void ConstructorWithExcludePropertiesSetToEmptyStringSetsExcludePropertiesToEmptySet()
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\t")]
+        public void ConstructorWithWhiteSpaceExcludePropertiesStringSetsExcludePropertiesToEmptySet(string whiteSpaceExcludeProperties)
         {
             // Arrange
-            var propertiesContractResolver = new PropertiesContractResolver(excludeProperties: string.Empty);
+            var propertiesContractResolver = new PropertiesContractResolver(excludeProperties: whiteSpaceExcludeProperties);
 
             // Act
 
@@ -111,7 +117,7 @@
         }
 
         [Fact]
-        public void ConstructorWithPropertiesSetToStringWithOnePropertyAddsThatProperty()
+        public void ConstructorWithPropertiesStringWithOnePropertyAddsThatProperty()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver(properties: "Movie.Id");
@@ -123,7 +129,7 @@
         }
 
         [Fact]
-        public void ConstructorWithExcludePropertiesSetToStringWithOnePropertyAddsThatProperty()
+        public void ConstructorWithExcludePropertiesStringWithOnePropertyAddsThatProperty()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver(excludeProperties: "Movie.Id");
@@ -140,7 +146,7 @@
         [InlineData("Movie.Id, Movie.Title")]
         [InlineData("Movie.Id,\tMovie.Title")]
         [InlineData(" Movie.Id,Movie.Title ")]
-        public void ConstructorWithPropertiesSetToStringAddsThoseProperties(string properties)
+        public void ConstructorWithPropertiesSetToStringWithSeveralPropertiesAddsThoseProperties(string properties)
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver(properties: properties);
@@ -171,7 +177,7 @@
         }
         
         [Fact]
-        public void ConstructorWithPropertiesAsStringSetsPropertyMatchModeToName()
+        public void ConstructorWithStringPropertiesSetsPropertyMatchModeToName()
         {
             // Arrange
 
@@ -183,7 +189,7 @@
         }
 
         [Fact]
-        public void ConstructorWithPropertiesAsCollectionSetsPropertyMatchModeToName()
+        public void ConstructorWithCollectionPropertiesSetsPropertyMatchModeToName()
         {
             // Arrange
 
