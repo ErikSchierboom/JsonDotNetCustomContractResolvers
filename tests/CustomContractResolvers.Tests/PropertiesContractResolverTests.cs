@@ -241,7 +241,7 @@
         [Theory]
         [InlineData(PropertyMatchMode.Name)]
         [InlineData(PropertyMatchMode.NameAndType)]
-        public void ConvertingWithPropertiesAndExcludePropertiesAreEmptySerializesObjectLikeDefault(PropertyMatchMode propertyMatchMode)
+        public void DefaultSettingsDoNotModifyDefaultSerialization(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
             var objectToSerialize = CreateObjectToSerialize();
@@ -258,7 +258,7 @@
         [Theory]
         [InlineData(PropertyMatchMode.Name)]
         [InlineData(PropertyMatchMode.NameAndType)]
-        public void ConvertingWithPropertiesIsGeneralWildcardSerializesObjectLikeDefault(PropertyMatchMode propertyMatchMode)
+        public void PropertiesSetToGeneralWildcardWillSerializeAllProperties(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
             var objectToSerialize = CreateObjectToSerialize();
@@ -275,7 +275,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNamePropertyMatchModeWithPropertiesContainsOneFieldOnlySerializesSpecifiedField()
+        public void PropertiesContainsOnePropertyWillOnlySerializeThatProperty()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
@@ -289,7 +289,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNamePropertyMatchModeWillIgnoreTypeOfProperties()
+        public void NamePropertyMatchModeWillIgnoreTypeOfProperties()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
@@ -303,7 +303,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNamePropertyMatchModeWillIgnoreUnknownTypes()
+        public void NamePropertyMatchModeWillIgnoreUnknownTypes()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
@@ -317,7 +317,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNameAndTypePropertyMatchModeWillOnlyMatchWhenTypeAndNameMatch()
+        public void NameAndTypePropertyMatchModeWillOnlyMatchWhenTypeAndNameMatch()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -331,7 +331,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNameAndTypePropertyMatchModeWillNotMatchUnknownTypeProperties()
+        public void NameAndTypePropertyMatchModeWillNotMatchUnknownTypeProperties()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -345,7 +345,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNameAndTypePropertyMatchModeWillIgnorePropertiesWithoutType()
+        public void NameAndTypePropertyMatchModeWillIgnorePropertiesWithoutType()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -363,7 +363,7 @@
         [InlineData("MOVIE.Id")]
         [InlineData("MOVIE.ID")]
         [InlineData("movie.id")]
-        public void ConvertingUsingNamePropertyMatchModeWithPropertiesIsNotCaseSensitive(string field)
+        public void NamePropertyMatchModeMatchesPropertiesCaseInsensitive(string field)
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
@@ -381,7 +381,7 @@
         [InlineData("MOVIE.Id")]
         [InlineData("MOVIE.ID")]
         [InlineData("movie.id")]
-        public void ConvertingUsingNameAndTypePropertyMatchModeWithPropertiesIsNotCaseSensitive(string field)
+        public void NameAndTypePropertyMatchModeMatchesPropertiesCaseInsensitive(string field)
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -398,7 +398,7 @@
         [InlineData("Inventory")]
         [InlineData("Id2")]
         [InlineData("Id_")]
-        public void ConvertingUsingNameMatchModeWithOnlyUnknownPropertiesReturnsEmptyObject(string unknownField)
+        public void NamePropertyMatchModeWithOnlyUnknownPropertiesDoesNotSerializeAnything(string unknownField)
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
@@ -416,7 +416,7 @@
         [InlineData("Movie.Id2")]
         [InlineData("Movie.Id_")]
         [InlineData("_Movie.Id")]
-        public void ConvertingUsingNameAndTypePropertyMatchModeWithOnlyUnknownPropertiesReturnsEmptyObjct(string unknownField)
+        public void NameAndTypePropertyMatchModeWithOnlyUnknownPropertiesDoesNotSerializeAnything(string unknownField)
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -430,7 +430,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNameMatchModeWithPropertiesWithOnlyPropertyNamesOnlySerializesSpecifiedProperties()
+        public void NamePropertyMatchModeWillOnlySerializeSpecifiedProperties()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
@@ -445,7 +445,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNameMatchModeWithPropertiesWithPropertyNamesAndTypeSerializesSpecifiedProperties()
+        public void NamePropertyMatchModeWithPropertiesWithTypeSpecifiedWillSerializeSpecifiedProperties()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
@@ -460,7 +460,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNameAndTypePropertyMatchModeWithPropertiesWithPropertyNamesAndTypeOnlySerializesSpecifiedProperties()
+        public void NameAndTypePropertyMatchModeWithPropertiesWithTypeSpecifiedWillSerializeSpecifiedProperties()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -475,7 +475,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNameAndTypePropertyMatchModeWithPropertiesWithPropertyNamesOnlyDoesNotSerializeSpecifiedProperties()
+        public void NamePropertyMatchModeWithPropertiesWithNoTypeSpecifiedWillNotSerializeSpecifiedProperties()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -490,37 +490,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNameMatchModeWithPropertiesContainsFieldForNestedPropertyOnlySerializesSpecifiedProperties()
-        {
-            // Arrange
-            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
-            propertiesContractResolver.Properties.Add("Title");
-            propertiesContractResolver.Properties.Add("Director");
-
-            // Act
-            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(propertiesContractResolver));
-
-            // Assert
-            Assert.Equal("{\"Title\":\"Inception\",\"Director\":{}}", json);
-        }
-
-        [Fact]
-        public void ConvertingUsingNameAndTypePropertyMatchModeWithPropertiesContainsFieldForNestedPropertyOnlySerializesSpecifiedProperties()
-        {
-            // Arrange
-            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
-            propertiesContractResolver.Properties.Add("Movie.Title");
-            propertiesContractResolver.Properties.Add("Movie.Director");
-
-            // Act
-            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(propertiesContractResolver));
-
-            // Assert
-            Assert.Equal("{\"Title\":\"Inception\",\"Director\":{}}", json);
-        }
-
-        [Fact]
-        public void ConvertingUsingNameMatchModeWithPropertiesContainsFieldOfNestedPropertyOnlySerializesSpecifiedProperties()
+        public void NamePropertyMatchModeCorrectlySerializesNestedProperties()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
@@ -536,7 +506,22 @@
         }
 
         [Fact]
-        public void ConvertingUsingNameMatchModeWithPropertiesContainsPropertyNameUsedInRootAndNestedPropertySerializesForAllTypes()
+        public void NameAndTypePropertyMatchModeCorrectlySerializesNestedProperties()
+        {
+            // Arrange
+            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
+            propertiesContractResolver.Properties.Add("Movie.Title");
+            propertiesContractResolver.Properties.Add("Movie.Director");
+
+            // Act
+            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(propertiesContractResolver));
+
+            // Assert
+            Assert.Equal("{\"Title\":\"Inception\",\"Director\":{}}", json);
+        }
+
+        [Fact]
+        public void NamePropertyMatchModeWithPropertiesThatExistInDifferentTypesSerializesPropertyOnAllTypes()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
@@ -551,7 +536,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNameAndTypePropertyMatchModeWithPropertiesContainsFieldOfNestedPropertyOnlySerializesSpecifiedProperties()
+        public void NameAndTypePropertyMatchModeWithPropertiesThatExistInDifferentTypesSerializesPropertyOnAllTypes()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -569,23 +554,7 @@
         [Theory]
         [InlineData(PropertyMatchMode.Name)]
         [InlineData(PropertyMatchMode.NameAndType)]
-        public void ConvertingWithPropertiesWildcardAddedForPropertySerializesAllPropertiesForSpecifiedProperty(PropertyMatchMode propertyMatchMode)
-        {
-            // Arrange
-            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
-            propertiesContractResolver.Properties.Add("Movie.*");
-
-            // Act
-            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(propertiesContractResolver));
-
-            // Assert
-            Assert.Equal("{\"Id\":12,\"Title\":\"Inception\",\"Director\":{}}", json);
-        }
-
-        [Theory]
-        [InlineData(PropertyMatchMode.Name)]
-        [InlineData(PropertyMatchMode.NameAndType)]
-        public void ConvertingWithPropertiesWildcardAddedForNestedPropertySerializesAllPropertiesForSpecifiedNestedProperty(PropertyMatchMode propertyMatchMode)
+        public void PropertiesWildcardWillCauseSerializationOfAllPropertiesOfTheSpecifiedType(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
@@ -602,23 +571,7 @@
         [Theory]
         [InlineData(PropertyMatchMode.Name)]
         [InlineData(PropertyMatchMode.NameAndType)]
-        public void ConvertingWithTypeWildcardAddedForPropertySerializesAllPropertiesWithSpecifiedPropertyName(PropertyMatchMode propertyMatchMode)
-        {
-            // Arrange
-            var customPropertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
-            customPropertiesContractResolver.Properties.Add("*.Title");
-
-            // Act
-            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(customPropertiesContractResolver));
-
-            // Assert
-            Assert.Equal("{\"Title\":\"Inception\"}", json);
-        }
-
-        [Theory]
-        [InlineData(PropertyMatchMode.Name)]
-        [InlineData(PropertyMatchMode.NameAndType)]
-        public void ConvertingWithTypeWildcardAddedForNestedPropertySerializesAllPropertiesForSpecifiedNestedProperty(PropertyMatchMode propertyMatchMode)
+        public void TypeWildcardWillCauseSerializationOfAllPropertiesWithTheSpecifiedName(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
             var customPropertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
@@ -637,7 +590,7 @@
         [InlineData("Id")]
         [InlineData("ID")]
         [InlineData("id")]
-        public void ConvertingUsingNamePropertyMatchModeWithExcludePropertiesIsNotCaseSensitive(string field)
+        public void NamePropertyMatchModeMatchesExcludePropertiesCaseInsensitive(string field)
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
@@ -655,7 +608,7 @@
         [InlineData("MOVIE.Id")]
         [InlineData("MOVIE.ID")]
         [InlineData("movie.id")]
-        public void ConvertingUsingNameAndTypePropertyMatchModeWithExcludePropertiesIsNotCaseSensitive(string field)
+        public void NameAndTypePropertyMatchModeMatchesExcludePropertiesCaseInsensitive(string field)
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -672,7 +625,7 @@
         [InlineData("Inventory")]
         [InlineData("Id2")]
         [InlineData("Id_")]
-        public void ConvertingUsingNamePropertyMatchModeIgnoresUnknownExcludeProperties(string unknownField)
+        public void NamePropertyMatchModeIgnoresUnknownExcludeProperties(string unknownField)
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
@@ -690,7 +643,7 @@
         [InlineData("Movie.Id2")]
         [InlineData("Movie.Id_")]
         [InlineData("_Movie.Id")]
-        public void ConvertingUsingNameAndTypePropertyMatchModeIgnoresUnknownExcludeProperties(string unknownField)
+        public void NameAndTypePropertyMatchModeIgnoresUnknownExcludeProperties(string unknownField)
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -706,7 +659,7 @@
         [Theory]
         [InlineData(PropertyMatchMode.Name)]
         [InlineData(PropertyMatchMode.NameAndType)]
-        public void ConvertingWithExcludePropertiesIsGeneralWildcardDoesNotSerializeAnyProperties(PropertyMatchMode propertyMatchMode)
+        public void ExcludePropertiesSetToGeneralWildcardDoesNotSerializeAnyProperties(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
@@ -720,7 +673,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNamePropertyMatchModeWithExcludePropertiesWithPropertyNameOnlyDoesNotSerializeSpecifiedFields()
+        public void NamePropertyMatchModeWithExcludePropertiesWithPropertyNameOnlyWillNotSerializeSpecifiedFields()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
@@ -735,7 +688,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNamePropertyMatchModeWithExcludePropertiesWithPropertyTypeAndNameDoesNotSerializeSpecifiedFields()
+        public void NamePropertyMatchModeWithExcludePropertiesWithPropertyTypeAndNameOnlyWillNotSerializeSpecifiedFields()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
@@ -750,7 +703,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNameAndTypePropertyMatchModeWithExcludePropertiesWithPropertyTypeAndNameDoesNotSerializeSpecifiedFields()
+        public void NameAndTypePropertyMatchModeWithExcludePropertiesWithPropertyTypeAndNameOnlyWillNotSerializeSpecifiedFields()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -765,7 +718,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNameAndTypePropertyMatchModeWithExcludePropertiesWithoutDeclaringTypeNameWillSerializeSpecifiedFields()
+        public void NameAndTypePropertyMatchModeWithExcludePropertiesWithPropertyNameOnlyWillSerializeSpecifiedFields()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -780,35 +733,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNamePropertyMatchModeWithExcludePropertiesContainsOneFieldDoesNotSerializeSpecifiedField()
-        {
-            // Arrange
-            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
-            propertiesContractResolver.ExcludeProperties.Add("Id");
-
-            // Act
-            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(propertiesContractResolver));
-
-            // Assert
-            Assert.Equal("{\"Title\":\"Inception\",\"Director\":{\"Name\":\"Christopher Nolan\"}}", json);
-        }
-
-        [Fact]
-        public void ConvertingUsingNameAndTypePropertyMatchModeWithExcludePropertiesContainsOneFieldDoesNotSerializeSpecifiedField()
-        {
-            // Arrange
-            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
-            propertiesContractResolver.ExcludeProperties.Add("Movie.Id");
-
-            // Act
-            var json = JsonConvert.SerializeObject(CreateObjectToSerialize(), CreateCustomJsonSerializerSettings(propertiesContractResolver));
-
-            // Assert
-            Assert.Equal("{\"Title\":\"Inception\",\"Director\":{\"Id\":77,\"Name\":\"Christopher Nolan\"}}", json);
-        }
-
-        [Fact]
-        public void ConvertingUsingNameMatchModeWithExcludePropertiesContainsSeveralPropertiesDoesNotSerializeSpecifiedProperties()
+        public void NamePropertyMatchModeWillNotSerializeSpecifiedExcludeProperties()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
@@ -823,7 +748,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNameAndTypePropertyMatchModeWithExcludePropertiesContainsSeveralPropertiesDoesNotSerializeSpecifiedProperties()
+        public void NameAndTypePropertyMatchModeWillNotSerializeSpecifiedExcludeProperties()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -838,7 +763,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNamePropertyMatchModeWithExcludePropertiesContainsFieldForNestedPropertyOnlySerializesSpecifiedProperties()
+        public void NamePropertyMatchModeWithNestedExcludePropertiesWillNotSerializeExcludeProperties()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
@@ -853,7 +778,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNameAndTypePropertyMatchModeWithExcludePropertiesContainsFieldForNestedPropertyOnlySerializesSpecifiedProperties()
+        public void NameAndTypePropertyMatchModeWithNestedExcludePropertiesWillNotSerializeExcludeProperties()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -870,7 +795,7 @@
         [Theory]
         [InlineData(PropertyMatchMode.Name)]
         [InlineData(PropertyMatchMode.NameAndType)]
-        public void ConvertingWithExcludePropertiesContainsFieldOfNestedPropertyOnlySerializesSpecifiedProperties(PropertyMatchMode propertyMatchMode)
+        public void ExcludePropertiesWithNestedPropertyDoesNotSerializeNestedProperty(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
@@ -887,7 +812,7 @@
         [Theory]
         [InlineData(PropertyMatchMode.Name)]
         [InlineData(PropertyMatchMode.NameAndType)]
-        public void ConvertingWithExcludePropertiesWildcardAddedForPropertySerializesAllPropertiesForSpecifiedProperty(PropertyMatchMode propertyMatchMode)
+        public void ExcludePropertiesWithTypeWildcardPropertyDoesNotSerializeAnyPropertyWithTheSpecifiedType(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -903,7 +828,7 @@
         [Theory]
         [InlineData(PropertyMatchMode.Name)]
         [InlineData(PropertyMatchMode.NameAndType)]
-        public void ConvertingWithExcludePropertiesWildcardAddedForNestedPropertySerializesAllPropertiesForSpecifiedNestedProperty(PropertyMatchMode propertyMatchMode)
+        public void ExcludePropertiesWithTypeWildcardForNestedPropertyDoesNotSerializeAnyPropertyWithTheSpecifiedType(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -919,7 +844,7 @@
         [Theory]
         [InlineData(PropertyMatchMode.Name)]
         [InlineData(PropertyMatchMode.NameAndType)]
-        public void ConvertingWithExcludePropertiesTypeWildcardAddedForPropertySerializesAllPropertiesForSpecifiedProperty(PropertyMatchMode propertyMatchMode)
+        public void ExcludePropertiesWithTypeWildcardDoesNotSerializeAnyPropertyWithTheSpecifiedName(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
             var customPropertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -935,7 +860,7 @@
         [Theory]
         [InlineData(PropertyMatchMode.Name)]
         [InlineData(PropertyMatchMode.NameAndType)]
-        public void ConvertingWithExcludePropertiesTypeWildcardAddedForNestedPropertySerializesAllPropertiesForSpecifiedNestedProperty(PropertyMatchMode propertyMatchMode)
+        public void ExcludePropertiesWithTypeWildcardAddedForPropertyInDifferentTypesDoesNotSerializePropertyInAnyType(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
             var customPropertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -949,7 +874,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNameAndTypePropertyMatchModeWithPropertyBeingSpecifiedAsBothFieldAndExcludeFieldWillNotSerializeProperty()
+        public void SamePropertySpecifiedAsNameAndTypePropertiesAndExcludePropertiesWillNotSerializeThatProperty()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
@@ -964,7 +889,7 @@
         }
 
         [Fact]
-        public void ConvertingUsingNameMatchModeWithPropertyBeingSpecifiedAsBothFieldAndExcludeFieldWillNotSerializeProperty()
+        public void SamePropertySpecifiedAsNameOnlyPropertiesAndExcludePropertiesWillNotSerializeThatProperty()
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.Name };
@@ -981,7 +906,7 @@
         [Theory]
         [InlineData(PropertyMatchMode.Name)]
         [InlineData(PropertyMatchMode.NameAndType)]
-        public void ConvertingWithWildcardPropertyBeingSpecifiedAsBothFieldAndExcludeFieldWillNotSerializeAnything(PropertyMatchMode propertyMatchMode)
+        public void SamePropertySpecifiedAsTypeWildcardPropertiesAndExcludePropertiesWillNotSerializeThatProperty(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
@@ -998,7 +923,7 @@
         [Theory]
         [InlineData(PropertyMatchMode.Name)]
         [InlineData(PropertyMatchMode.NameAndType)]
-        public void ConvertingWithWildcardBeingSpecifiedAsBothFieldAndExcludeFieldWillNotSerializeAnything(PropertyMatchMode propertyMatchMode)
+        public void ExcludePropertiesGeneralWildcardOverrulesPropertiesGeneralWildcard(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
             var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
