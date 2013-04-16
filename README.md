@@ -202,4 +202,4 @@ The library is available on NuGet package available. You can install it using th
 </table>
 
 ## License
-[MIT License](https://github.com/ErikSchierboom/JsonDotNetCustomContractResolvers/blob/master/LICENSE.md)
+[Apache License 2.0](LICENSE.md)
