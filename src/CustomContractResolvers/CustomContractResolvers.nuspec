@@ -12,9 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>
-        Added option to specify property match mode (name only matching or property name and type matching).
-        ToString on PropertiesCollection returns properties in format that can also be used as input for PropertiesCollection.
-        Allow properties to be separated by tabs.
+        Upgraded to latest version of JSON.NET.
     </releaseNotes>
     <copyright>Copyright 2013</copyright>
     <tags>JSON.NET JSON ContractResolver Properties Exclude</tags>
