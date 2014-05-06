@@ -7,134 +7,173 @@ The PropertiesContractResolver class can be used to easily serialize only specif
 ## Usage
 Let's say that we will be serializing an instance of the following class:
 
-    public class Movie
-    {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Director { get; set; }
-	}
+```c#
+public class Movie
+{
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public string Director { get; set; }
+}
+```
 
 If we serialize an instance of this class using JSON.NET and the default settings, the output will look like this:
 
-    {"Id":12,"Title":"Inception","Director":"Christopher Nolan"}
+```json
+{"Id":12,"Title":"Inception","Director":"Christopher Nolan"}
+```
 
 Now suppose that we do not want to serialize the Id property. We can do this by plugging-in the PropertiesContractResolver. The PropertiesContractResolver has a property named ExcludeProperties that contains a set of property names that are to be excluded from serialization. 
 
 To exclude the Id field, we first need to create an instance of the PropertiesContractResolver class and add **"Id"** to the ExcludeProperties property:
 
-
-    var propertiesContractResolver = new PropertiesContractResolver();
-    propertiesContractResolver.ExcludeProperties.Add("Id");
+```c#
+var propertiesContractResolver = new PropertiesContractResolver();
+propertiesContractResolver.ExcludeProperties.Add("Id");
+```
 
 Then we need to create a JsonSerializerSettings instance and set its ContractResolver to our PropertiesContractResolver instance:
 First, you need to set the ContractResolver property of a JsonSerializerSettings instance to an PropertiesContractResolver instance:
 
-    var serializerSettings = new JsonSerializerSettings();
-    serializerSettings.ContractResolver = propertiesContractResolver;
+```c#
+var serializerSettings = new JsonSerializerSettings();
+serializerSettings.ContractResolver = propertiesContractResolver;
+```
 
 Now, we are ready to serialize our Movie instance again, but now using our PropertiesContractResolver instance that ignores the Id property. We do this by having JSON.NET use our customized JsonSerializerSettings instance when serializing:
 
-    JsonConvert.SerializeObject(movie, serializerSettings);
+```c#
+JsonConvert.SerializeObject(movie, serializerSettings);
+```
 
 The value returned will now equal:
 
-    {"Title":"Inception","Director":"Christopher Nolan"}
+```json
+{"Title":"Inception","Director":"Christopher Nolan"}
+```
 
 Of course, we could have also approached this the other way around by specifying which properties to return:
 
-
-    var propertiesContractResolver = new PropertiesContractResolver();
-    propertiesContractResolver.Properties.Add("Title");
-    propertiesContractResolver.Properties.Add("Director");
+```c#
+var propertiesContractResolver = new PropertiesContractResolver();
+propertiesContractResolver.Properties.Add("Title");
+propertiesContractResolver.Properties.Add("Director");
+```
 
 This will reult in the same output:
 
-    {"Title":"Inception","Director":"Christopher Nolan"}
+```json
+{"Title":"Inception","Director":"Christopher Nolan"}
+``` 
 
 You can also use a combination of properties to return and properties to exclude. The way this works is that first the properties to be returned are filtered, and then we see which of those properties needs to be excluded.
 
 ## Property match mode
 The previous example only looked at the property name to see if a property matched. However, it is also possible to have properties only match when their combination of property name and type matches. This allows you to be even more specific on what properties to include or exclude. To use this explicit type matching, you have to set the `PropertyMatchMode` property to `PropertyMatchMode.NameAndType` (the default is `PropertyMatchMode.Name`):
 
-    var propertiesContractResolver = new PropertiesContractResolver();
-    propertiesContractResolver.PropertyMatchMode = PropertyMatchMode.NameAndType;
+```c#
+var propertiesContractResolver = new PropertiesContractResolver();
+propertiesContractResolver.PropertyMatchMode = PropertyMatchMode.NameAndType;
+```
 
 Now properties will only match when both the property name and type are equal to the specified properties. Of course, this also means that you have to specify the type when adding properties. Explicit property names have the format: **"{DeclaringTypeName}.{PropertyName}"**. 
 
 We can see how this works, by returning to our previous example where we want to exclude the Id property. If we do not change anything, the property will not be excluded as we did not specify a type:
 
-    propertiesContractResolver.ExcludeProperties.Add("Id");
+```c#
+propertiesContractResolver.ExcludeProperties.Add("Id");
+```
 
-    // This will serialize to: {"Id":12,"Title":"Inception","Director":"Christopher Nolan"}
+This will serialize to:
+```json
+{"Id":12,"Title":"Inception","Director":"Christopher Nolan"}
+```
 
 However, if we add the property type, everything works fine:
 
-    propertiesContractResolver.ExcludeProperties.Add("Movie.Id");
+```c#
+propertiesContractResolver.ExcludeProperties.Add("Movie.Id");
+```
 
-    // This will serialize to: {"Title":"Inception","Director":"Christopher Nolan"}
+And this will serialize to: 
+
+```json
+{"Title":"Inception","Director":"Christopher Nolan"}
+```
 
 ## Wildcards
 To make things even easier, it is also possible to use wildcards for property names. For example, if you want to exclude all properties of the Movie class you can also do:
 
-    var propertiesContractResolver = new PropertiesContractResolver();
-    propertiesContractResolver.ExcludeProperties.Add("Movie.*");
+```c#
+var propertiesContractResolver = new PropertiesContractResolver();
+propertiesContractResolver.ExcludeProperties.Add("Movie.*");
+```
 
 You can also use a wildcard for property types For example, if you want to return the Id property of all types you can do:
 
-    var propertiesContractResolver = new PropertiesContractResolver();
-    propertiesContractResolver.Properties.Add("*.Id");
+```c#
+var propertiesContractResolver = new PropertiesContractResolver();
+propertiesContractResolver.Properties.Add("*.Id");
+```
 
 Finally, there is also a wildcard that matches all properties. This way you can exclude all properties as follows:
 
-    var propertiesContractResolver = new PropertiesContractResolver();
-    propertiesContractResolver.Properties.Add("*");
+```c#
+var propertiesContractResolver = new PropertiesContractResolver();
+propertiesContractResolver.Properties.Add("*");
+```
 
 ## Combining properties in a single string
 It is possible to specify multiple properties in a single string. The properties in that string must be comma-, space or tab-separated. The following two statement blocks are semantically equivalent:
 
-    // Combined properties version
-    propertiesContractResolver.Properties.Add("Title Director");
+```c#
+// Combined properties version
+propertiesContractResolver.Properties.Add("Title Director");
 
-    // Single properties version
-    propertiesContractResolver.Properties.Add("Title");
-    propertiesContractResolver.Properties.Add("Director");    
+// Single properties version
+propertiesContractResolver.Properties.Add("Title");
+propertiesContractResolver.Properties.Add("Director");    
+```
 
 ## Initializing properties in constructor
 To make it more easier to set the properties on an instance of the PropertiesContractResolver class, there are two constructor overloads that immediately set the properties for you:
 
-    // 1. String constructor overload
-    var propertiesContractResolver = new PropertiesContractResolver("Title Director", "Id");
+```c#
+// 1. String constructor overload
+var propertiesContractResolver = new PropertiesContractResolver("Title Director", "Id");
 
-    // which is equivalent to ...
-    var propertiesContractResolver = new PropertiesContractResolver();
-    propertiesContractResolver.Properties.Add("Title");
-    propertiesContractResolver.Properties.Add("Director");
-    propertiesContractResolver.ExcludeProperties.Add("Id");
+// which is equivalent to ...
+var propertiesContractResolver = new PropertiesContractResolver();
+propertiesContractResolver.Properties.Add("Title");
+propertiesContractResolver.Properties.Add("Director");
+propertiesContractResolver.ExcludeProperties.Add("Id");
 
-    // 2. String collection constructor overload
-    var propertiesContractResolver = new PropertiesContractResolver(new[] { "Title", "Director" }, new string[0]);
+// 2. String collection constructor overload
+var propertiesContractResolver = new PropertiesContractResolver(new[] { "Title", "Director" }, new string[0]);
 
-    // which is equivalent to ...
-    var propertiesContractResolver = new PropertiesContractResolver();
-    propertiesContractResolver.Properties.Add("Title");
-    propertiesContractResolver.Properties.Add("Director");
+// which is equivalent to ...
+var propertiesContractResolver = new PropertiesContractResolver();
+propertiesContractResolver.Properties.Add("Title");
+propertiesContractResolver.Properties.Add("Director");
+```
 
 ## Serializing properties collection
 The properties collection class has its `ToString` method overloaded to return the properties in a string format. This can be convenient when you want to store the serialized properties. An short example will show how this works:
 
-    // Create the properties collection
-    var properties = new PropertiesCollection();
+```c#
+// Create the properties collection
+var properties = new PropertiesCollection();
 
-    // then add the properties
-    properties.Add("Title");
-    properties.Add("Director");
+// then add the properties
+properties.Add("Title");
+properties.Add("Director");
 
-    // then convert the properties to their string format
-    var propertiesAsString = properties.ToString(); // Returns "Title,Director"
-    
-    // we can now create a new properties collection 
-    var propertiesFromString = new PropertiesCollection(propertiesAsString);
-    propertiesFromString.SetEquals(properties); // This returns true
+// then convert the properties to their string format
+var propertiesAsString = properties.ToString(); // Returns "Title,Director"
+
+// we can now create a new properties collection 
+var propertiesFromString = new PropertiesCollection(propertiesAsString);
+propertiesFromString.SetEquals(properties); // This returns true
+```
 
 ## Get it on NuGet!
 The library is available on NuGet package available. You can install it using the following command:
