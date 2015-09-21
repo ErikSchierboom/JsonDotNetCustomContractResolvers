@@ -2,5 +2,6 @@
 *.nupkg
 *.sln.DotSettings*
 *.suo
+.vs
 packages
 StyleCop.Cache
