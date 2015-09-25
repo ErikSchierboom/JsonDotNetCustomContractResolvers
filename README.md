@@ -1,9 +1,7 @@
 # JSON.NET custom contract resolvers
 Libraries containing custom contract resolvers for JSON.NET.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/1duqfo4432r3ka1e)](https://ci.appveyor.com/project/ErikSchierboom/jsondotnetcustomcontractresolvers)
-
-[![Coverage Status](https://coveralls.io/repos/ErikSchierboom/JsonDotNetCustomContractResolvers/badge.svg?branch=&service=github)](https://coveralls.io/github/ErikSchierboom/JsonDotNetCustomContractResolvers?branch=)
+[![Build status](https://ci.appveyor.com/api/projects/status/1duqfo4432r3ka1e)](https://ci.appveyor.com/project/ErikSchierboom/jsondotnetcustomcontractresolvers) [![Coverage Status](https://coveralls.io/repos/ErikSchierboom/JsonDotNetCustomContractResolvers/badge.svg?branch=&service=github)](https://coveralls.io/github/ErikSchierboom/JsonDotNetCustomContractResolvers?branch=master)
 
 ## What can it be used for?
 The PropertiesContractResolver class can be used to easily serialize only specific fields, which can be very convenient when building an API that allows the user to specify what fields are to be returned. It also allows fields to be excluded from serialization.
