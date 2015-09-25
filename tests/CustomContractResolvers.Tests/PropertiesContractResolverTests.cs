@@ -10,7 +10,6 @@
     using Newtonsoft.Json.Serialization;
 
     using Xunit;
-    using Xunit.Extensions;
 
     public class PropertiesContractResolverTests
     {

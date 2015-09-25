@@ -4,7 +4,6 @@
     using System.Collections.Generic;
 
     using Xunit;
-    using Xunit.Extensions;
 
     public class PropertiesCollectionTests
     {
