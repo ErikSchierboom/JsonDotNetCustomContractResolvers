@@ -24,17 +24,11 @@
             Assert.Equal("{}", json);
         }
 
-        private static Movie CreateObjectToSerialize()
-        {
-            return new Movie { Id = 12, Title = "Inception" };
-        }
+        private static Movie CreateObjectToSerialize() => new Movie { Id = 12, Title = "Inception" };
 
         private class TestableCustomPropertyContractResolver : CustomPropertyContractResolver
         {
-            protected override Predicate<object> ShouldSerialize(JsonProperty jsonProperty)
-            {
-                return x => false;
-            }
+            protected override Predicate<object> ShouldSerialize(JsonProperty jsonProperty) => x => false;
         }
     }
 }

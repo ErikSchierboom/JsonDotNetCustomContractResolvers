@@ -51,7 +51,7 @@ namespace JsonDotNet.CustomContractResolvers
         /// <remarks>
         /// If no properties have been specified, all properties will be serialized.
         /// </remarks>
-        public PropertiesCollection Properties { get; private set; }
+        public PropertiesCollection Properties { get; }
 
         /// <summary>
         /// Gets the name of the properties that are not to be serialized.
@@ -62,7 +62,7 @@ namespace JsonDotNet.CustomContractResolvers
         /// <remarks>
         /// If no exclude properties have been specified, all properties will be serialized.
         /// </remarks>
-        public PropertiesCollection ExcludeProperties { get; private set; }
+        public PropertiesCollection ExcludeProperties { get; }
 
         /// <summary>
         /// Gets or sets the property match mode.
@@ -113,43 +113,25 @@ namespace JsonDotNet.CustomContractResolvers
                    properties.Contains(GetFullName(jsonProperty));
         }
 
-        private static string GetWildcardForType(JsonProperty jsonProperty)
-        {
-            return GetFullNameForTypeProperty(Wildcard, jsonProperty.PropertyName);
-        }
+        private static string GetWildcardForType(JsonProperty jsonProperty) => GetFullName(Wildcard, jsonProperty.PropertyName);
 
-        private static string GetWildcardForProperty(JsonProperty jsonProperty)
-        {
-            return GetFullNameForTypeProperty(jsonProperty.DeclaringType, Wildcard);
-        }
+        private static string GetWildcardForProperty(JsonProperty jsonProperty) => GetFullName(jsonProperty.DeclaringType, Wildcard);
 
-        private static string GetFullName(JsonProperty jsonProperty)
-        {
-            return GetFullNameForTypeProperty(jsonProperty.DeclaringType, jsonProperty.PropertyName);
-        }
+        private static string GetFullName(JsonProperty jsonProperty) => GetFullName(jsonProperty.DeclaringType, jsonProperty.PropertyName);
 
-        private static string GetFullNameForTypeProperty(MemberInfo declaringType, string propertyName)
-        {
-            return GetFullNameForTypeProperty(declaringType.Name, propertyName);
-        }
+        private static string GetFullName(MemberInfo declaringType, string propertyName) => GetFullName(declaringType.Name, propertyName);
 
-        private static string GetFullNameForTypeProperty(string declaringTypeName, string propertyName)
-        {
-            return declaringTypeName + PropertyTypeAndNameSeparator + propertyName;
-        }
+        private static string GetFullName(string declaringTypeName, string propertyName) => declaringTypeName + PropertyTypeAndNameSeparator + propertyName;
 
         private static IEnumerable<string> AddTypeWildcardToNameOnlyProperties(PropertiesCollection properties)
         {
             var propertiesWithNameOnly = properties.Where(IsNameOnlyProperty);
-            var propertiesWithWilcardAsType = propertiesWithNameOnly.Select(p => GetFullNameForTypeProperty(Wildcard, p));
+            var propertiesWithWilcardAsType = propertiesWithNameOnly.Select(p => GetFullName(Wildcard, p));
 
             return properties.Except(propertiesWithNameOnly).Union(propertiesWithWilcardAsType);
         }
 
-        private static bool IsNameOnlyProperty(string p)
-        {
-            return p != Wildcard && !p.Contains(PropertyTypeAndNameSeparator);
-        }
+        private static bool IsNameOnlyProperty(string p) => p != Wildcard && !p.Contains(PropertyTypeAndNameSeparator);
 
         private PropertiesCollection NormalizeProperties(PropertiesCollection properties)
         {
@@ -161,24 +143,12 @@ namespace JsonDotNet.CustomContractResolvers
             return properties;
         }
 
-        private void MarkAllPropertiesForSerialization()
-        {
-            this.normalizedProperties.Add(Wildcard);
-        }
+        private void MarkAllPropertiesForSerialization() => this.normalizedProperties.Add(Wildcard);
 
-        private bool NoPropertiesHaveBeenSpecified()
-        {
-            return !this.normalizedProperties.Any();
-        }
+        private bool NoPropertiesHaveBeenSpecified() => !this.normalizedProperties.Any();
 
-        private bool PropertyIsIncluded(JsonProperty jsonProperty)
-        {
-            return PropertiesContainsProperty(this.normalizedProperties, jsonProperty);
-        }
+        private bool PropertyIsIncluded(JsonProperty jsonProperty) => PropertiesContainsProperty(this.normalizedProperties, jsonProperty);
 
-        private bool PropertyIsExcluded(JsonProperty jsonProperty)
-        {
-            return PropertiesContainsProperty(this.normalizedExcludeProperties, jsonProperty);
-        }
+        private bool PropertyIsExcluded(JsonProperty jsonProperty) => PropertiesContainsProperty(this.normalizedExcludeProperties, jsonProperty);
     }
 }

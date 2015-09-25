@@ -37,16 +37,13 @@
             return ParseProperties(item).Aggregate(false, (current, property) => current | base.Add(property));
         }
 
-        public override string ToString()
-        {
-            return string.Join(CommaSeparator.ToString(CultureInfo.InvariantCulture), this);
-        }
+        public override string ToString() => string.Join(CommaSeparator.ToString(CultureInfo.InvariantCulture), this);
 
         private static IEnumerable<string> ParseProperties(string properties)
         {
             if (properties == null)
             {
-                throw new ArgumentNullException("properties");
+                throw new ArgumentNullException(nameof(properties));
             }
 
             return properties.Split(CommaSeparator, SpaceSeparator, TabSeparator).Where(p => !string.IsNullOrWhiteSpace(p));

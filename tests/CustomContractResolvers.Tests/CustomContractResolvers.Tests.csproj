@@ -49,8 +49,6 @@
     <Compile Include="CustomPropertyContractResolverTests.cs" />
     <Compile Include="PropertiesCollectionTests.cs" />
     <Compile Include="PropertiesContractResolverTests.cs" />
-    <Compile Include="Stubs\Author.cs" />
-    <Compile Include="Stubs\Book.cs" />
     <Compile Include="Stubs\Director.cs" />
     <Compile Include="Stubs\Movie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
