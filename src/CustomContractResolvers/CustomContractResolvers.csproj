@@ -5,6 +5,7 @@
     <AssemblyName>JsonDotNet.CustomContractResolvers</AssemblyName>
     <RootNamespace>JsonDotNet.CustomContractResolvers</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DebugType>full</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
