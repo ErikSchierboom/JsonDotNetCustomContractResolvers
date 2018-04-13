@@ -8,6 +8,7 @@
     <AssemblyName>JsonDotNet.CustomContractResolvers.Tests</AssemblyName>
 
     <RootNamespace>JsonDotNet.CustomContractResolvers.Tests</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
