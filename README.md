@@ -191,7 +191,7 @@ The library is available on NuGet package available. You can install it using th
   </tr>
   <tr>
      <td>2018-04-13</td>
-     <td>?</td>
+     <td>2.0.0</td>
      <td>
         Updated to .NET Standard 2.0.
      </td>
