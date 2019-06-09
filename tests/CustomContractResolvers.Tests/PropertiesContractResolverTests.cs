@@ -224,7 +224,7 @@
         public void ConvertingUsingWildcardsDoesNotModifyExcludePropertiesCollection(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
-            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
+            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
             propertiesContractResolver.ExcludeProperties.Add("*");
             propertiesContractResolver.ExcludeProperties.Add("*.Title");
             propertiesContractResolver.ExcludeProperties.Add("Title");
@@ -814,7 +814,7 @@
         public void ExcludePropertiesWithTypeWildcardPropertyDoesNotSerializeAnyPropertyWithTheSpecifiedType(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
-            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
+            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
             propertiesContractResolver.ExcludeProperties.Add("Movie.*");
 
             // Act
@@ -830,7 +830,7 @@
         public void ExcludePropertiesWithTypeWildcardForNestedPropertyDoesNotSerializeAnyPropertyWithTheSpecifiedType(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
-            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
+            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
             propertiesContractResolver.ExcludeProperties.Add("Director.*");
 
             // Act
@@ -846,7 +846,7 @@
         public void ExcludePropertiesWithTypeWildcardDoesNotSerializeAnyPropertyWithTheSpecifiedName(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
-            var customPropertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
+            var customPropertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
             customPropertiesContractResolver.ExcludeProperties.Add("*.Title");
 
             // Act
@@ -862,7 +862,7 @@
         public void ExcludePropertiesWithTypeWildcardAddedForPropertyInDifferentTypesDoesNotSerializePropertyInAnyType(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
-            var customPropertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
+            var customPropertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
             customPropertiesContractResolver.ExcludeProperties.Add("*.Id");
 
             // Act
