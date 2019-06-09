@@ -14,7 +14,7 @@
     <releaseNotes>
         Upgraded to latest version of JSON.NET.
     </releaseNotes>
-    <copyright>Copyright 2013</copyright>
+    <copyright>Copyright 2019</copyright>
     <tags>JSON.NET JSON ContractResolver Properties Exclude</tags>
   </metadata>
 </package>
