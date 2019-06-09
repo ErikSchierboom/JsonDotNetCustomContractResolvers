@@ -1,4 +1,4 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
@@ -15,15 +15,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomContractResolvers.Samples.Console", "samples\CustomContractResolvers.Samples.Console\CustomContractResolvers.Samples.Console.csproj", "{8ACC6F2C-71ED-4482-A768-5470397447AE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomContractResolvers.Samples.Website", "samples\CustomContractResolvers.Samples.Website\CustomContractResolvers.Samples.Website.csproj", "{540D0C12-4DB5-4780-AC1B-D39A91AA0C9A}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3D2DD485-D30F-46D4-832B-3ABB73360AAD}"
-	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
-		appveyor.yml = appveyor.yml
-		src\CustomContractResolvers\CustomContractResolvers.nuspec = src\CustomContractResolvers\CustomContractResolvers.nuspec
-		LICENSE.md = LICENSE.md
-		README.md = README.md
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
