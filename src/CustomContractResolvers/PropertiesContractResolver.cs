@@ -17,8 +17,8 @@ namespace JsonDotNet.CustomContractResolvers
         private const string Wildcard = "*";
         private const string PropertyTypeAndNameSeparator = ".";
 
-        private PropertiesCollection normalizedProperties;
-        private PropertiesCollection normalizedExcludeProperties;
+        private PropertiesCollection _normalizedProperties;
+        private PropertiesCollection _normalizedExcludeProperties;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertiesContractResolver" /> class.
@@ -82,8 +82,8 @@ namespace JsonDotNet.CustomContractResolvers
         /// </returns>
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            normalizedProperties = NormalizeProperties(Properties);
-            normalizedExcludeProperties = NormalizeProperties(ExcludeProperties);
+            _normalizedProperties = NormalizeProperties(Properties);
+            _normalizedExcludeProperties = NormalizeProperties(ExcludeProperties);
 
             if (NoPropertiesHaveBeenSpecified())
             {
@@ -143,12 +143,12 @@ namespace JsonDotNet.CustomContractResolvers
             return properties;
         }
 
-        private void MarkAllPropertiesForSerialization() => normalizedProperties.Add(Wildcard);
+        private void MarkAllPropertiesForSerialization() => _normalizedProperties.Add(Wildcard);
 
-        private bool NoPropertiesHaveBeenSpecified() => !normalizedProperties.Any();
+        private bool NoPropertiesHaveBeenSpecified() => !_normalizedProperties.Any();
 
-        private bool PropertyIsIncluded(JsonProperty jsonProperty) => PropertiesContainsProperty(normalizedProperties, jsonProperty);
+        private bool PropertyIsIncluded(JsonProperty jsonProperty) => PropertiesContainsProperty(_normalizedProperties, jsonProperty);
 
-        private bool PropertyIsExcluded(JsonProperty jsonProperty) => PropertiesContainsProperty(normalizedExcludeProperties, jsonProperty);
+        private bool PropertyIsExcluded(JsonProperty jsonProperty) => PropertiesContainsProperty(_normalizedExcludeProperties, jsonProperty);
     }
 }
