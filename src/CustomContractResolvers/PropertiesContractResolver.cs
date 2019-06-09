@@ -100,38 +100,40 @@ namespace JsonDotNet.CustomContractResolvers
         /// <returns>
         /// The predicate.
         /// </returns>
-        protected override Predicate<object> ShouldSerialize(JsonProperty jsonProperty)
-        {
-            return i => PropertyIsIncluded(jsonProperty) && !PropertyIsExcluded(jsonProperty);
-        }
+        protected override Predicate<object> ShouldSerialize(JsonProperty jsonProperty) =>
+            i => PropertyIsIncluded(jsonProperty) && !PropertyIsExcluded(jsonProperty);
 
-        private static bool PropertiesContainsProperty(ICollection<string> properties, JsonProperty jsonProperty)
-        {
-            return properties.Contains(Wildcard) ||
-                   properties.Contains(GetWildcardForType(jsonProperty)) ||
-                   properties.Contains(GetWildcardForProperty(jsonProperty)) ||
-                   properties.Contains(GetFullName(jsonProperty));
-        }
+        private static bool PropertiesContainsProperty(ICollection<string> properties, JsonProperty jsonProperty) =>
+            properties.Contains(Wildcard) ||
+            properties.Contains(GetWildcardForType(jsonProperty)) ||
+            properties.Contains(GetWildcardForProperty(jsonProperty)) ||
+            properties.Contains(GetFullName(jsonProperty));
 
-        private static string GetWildcardForType(JsonProperty jsonProperty) => GetFullName(Wildcard, jsonProperty.PropertyName);
+        private static string GetWildcardForType(JsonProperty jsonProperty) =>
+            GetFullName(Wildcard, jsonProperty.PropertyName);
 
-        private static string GetWildcardForProperty(JsonProperty jsonProperty) => GetFullName(jsonProperty.DeclaringType, Wildcard);
+        private static string GetWildcardForProperty(JsonProperty jsonProperty) =>
+            GetFullName(jsonProperty.DeclaringType, Wildcard);
 
-        private static string GetFullName(JsonProperty jsonProperty) => GetFullName(jsonProperty.DeclaringType, jsonProperty.PropertyName);
+        private static string GetFullName(JsonProperty jsonProperty) =>
+            GetFullName(jsonProperty.DeclaringType, jsonProperty.PropertyName);
 
-        private static string GetFullName(MemberInfo declaringType, string propertyName) => GetFullName(declaringType.Name, propertyName);
+        private static string GetFullName(MemberInfo declaringType, string propertyName) =>
+            GetFullName(declaringType.Name, propertyName);
 
-        private static string GetFullName(string declaringTypeName, string propertyName) => declaringTypeName + PropertyTypeAndNameSeparator + propertyName;
+        private static string GetFullName(string declaringTypeName, string propertyName) =>
+            declaringTypeName + PropertyTypeAndNameSeparator + propertyName;
 
         private static IEnumerable<string> AddTypeWildcardToNameOnlyProperties(PropertiesCollection properties)
         {
-            var propertiesWithNameOnly = properties.Where(IsNameOnlyProperty);
+            var propertiesWithNameOnly = properties.Where(IsNameOnlyProperty).ToList();
             var propertiesWithWilcardAsType = propertiesWithNameOnly.Select(p => GetFullName(Wildcard, p));
 
             return properties.Except(propertiesWithNameOnly).Union(propertiesWithWilcardAsType);
         }
 
-        private static bool IsNameOnlyProperty(string p) => p != Wildcard && !p.Contains(PropertyTypeAndNameSeparator);
+        private static bool IsNameOnlyProperty(string p) =>
+            p != Wildcard && !p.Contains(PropertyTypeAndNameSeparator);
 
         private PropertiesCollection NormalizeProperties(PropertiesCollection properties)
         {
@@ -147,8 +149,10 @@ namespace JsonDotNet.CustomContractResolvers
 
         private bool NoPropertiesHaveBeenSpecified() => !_normalizedProperties.Any();
 
-        private bool PropertyIsIncluded(JsonProperty jsonProperty) => PropertiesContainsProperty(_normalizedProperties, jsonProperty);
+        private bool PropertyIsIncluded(JsonProperty jsonProperty) =>
+            PropertiesContainsProperty(_normalizedProperties, jsonProperty);
 
-        private bool PropertyIsExcluded(JsonProperty jsonProperty) => PropertiesContainsProperty(_normalizedExcludeProperties, jsonProperty);
+        private bool PropertyIsExcluded(JsonProperty jsonProperty) =>
+            PropertiesContainsProperty(_normalizedExcludeProperties, jsonProperty);
     }
 }

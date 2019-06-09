@@ -936,28 +936,21 @@
             Assert.Equal("{}", json);
         }
 
-        private static JsonSerializerSettings CreateCustomJsonSerializerSettings(IContractResolver contractResolver)
-        {
-            return new JsonSerializerSettings { ContractResolver = contractResolver };
-        }
+        private static JsonSerializerSettings CreateCustomJsonSerializerSettings(IContractResolver contractResolver) =>
+            new JsonSerializerSettings { ContractResolver = contractResolver };
 
-        private static JsonSerializerSettings CreateDefaultJsonSerializerSettings()
-        {
-            return new JsonSerializerSettings();
-        }
+        private static JsonSerializerSettings CreateDefaultJsonSerializerSettings() => new JsonSerializerSettings();
 
-        private static Movie CreateObjectToSerialize()
-        {
-            return new Movie
-                       {
-                           Id = 12,
-                           Title = "Inception",
-                           Director = new Director
-                                          {
-                                              Id = 77,
-                                              Name = "Christopher Nolan",
-                                          }
-                       };
-        }
+        private static Movie CreateObjectToSerialize() =>
+            new Movie
+            {
+                Id = 12,
+                Title = "Inception",
+                Director = new Director
+                {
+                    Id = 77,
+                    Name = "Christopher Nolan",
+                }
+            };
     }
 }

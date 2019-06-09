@@ -32,12 +32,11 @@
         {
         }
 
-        public new bool Add(string item)
-        {
-            return ParseProperties(item).Aggregate(false, (current, property) => current | base.Add(property));
-        }
+        public new bool Add(string item) =>
+            ParseProperties(item).Aggregate(false, (current, property) => current | base.Add(property));
 
-        public override string ToString() => string.Join(CommaSeparator.ToString(CultureInfo.InvariantCulture), this);
+        public override string ToString() =>
+            string.Join(CommaSeparator.ToString(CultureInfo.InvariantCulture), this);
 
         private static IEnumerable<string> ParseProperties(string properties)
         {
