@@ -2,7 +2,9 @@
 *.nupkg
 *.sln.DotSettings*
 *.suo
-.vs
+.vs/
+.vscode/
+.idea/
 packages
 StyleCop.Cache
 build
