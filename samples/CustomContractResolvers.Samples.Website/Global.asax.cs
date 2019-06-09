@@ -5,7 +5,7 @@
     using System.Web.Optimization;
     using System.Web.Routing;
 
-    using JsonDotNet.CustomContractResolvers.Samples.Website.App_Start;
+    using App_Start;
 
     public class MvcApplication : HttpApplication
     {

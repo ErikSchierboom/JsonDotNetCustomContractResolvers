@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using JsonDotNet.CustomContractResolvers;
+    using CustomContractResolvers;
 
     public class IndexViewModel
     {

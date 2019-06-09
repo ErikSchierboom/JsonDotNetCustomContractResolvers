@@ -2,9 +2,9 @@
 {
     using System.Web.Mvc;
 
-    using JsonDotNet.CustomContractResolvers;
-    using JsonDotNet.CustomContractResolvers.Samples.Website.Models;
-    using JsonDotNet.CustomContractResolvers.Samples.Website.ViewModels.Home;
+    using CustomContractResolvers;
+    using Models;
+    using ViewModels.Home;
 
     using Newtonsoft.Json;
 
@@ -17,13 +17,13 @@
             var movieAsJson = JsonConvert.SerializeObject(movie);
             var model = new IndexViewModel { Json = movieAsJson };
 
-            return this.View(model);
+            return View(model);
         }
 
         [HttpPost]
         public ActionResult Index(IndexViewModel model)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 // Create a PropertiesContractResolver instance
                 var propertiesContractResolver = new PropertiesContractResolver();
@@ -44,7 +44,7 @@
                 model.JsonSerializationResult = JsonConvert.SerializeObject(movieToSerialize, serializerSettings);
             }
 
-            return this.View(model);
+            return View(model);
         }
 
         private static Movie CreateMovieToSerialize()

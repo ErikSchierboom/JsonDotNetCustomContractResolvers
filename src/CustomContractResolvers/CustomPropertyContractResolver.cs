@@ -23,7 +23,7 @@ namespace JsonDotNet.CustomContractResolvers
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             var jsonProperty = base.CreateProperty(member, memberSerialization);
-            jsonProperty.ShouldSerialize = this.ShouldSerialize(jsonProperty);
+            jsonProperty.ShouldSerialize = ShouldSerialize(jsonProperty);
 
             return jsonProperty;
         }

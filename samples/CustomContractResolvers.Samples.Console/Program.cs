@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    using JsonDotNet.CustomContractResolvers.Samples.Console.Examples;
+    using Examples;
 
     internal class Program
     {

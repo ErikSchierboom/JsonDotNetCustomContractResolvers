@@ -2,7 +2,7 @@
 {
     using System;
 
-    using JsonDotNet.CustomContractResolvers.Samples.Console.Models;
+    using Models;
 
     using Newtonsoft.Json;
 

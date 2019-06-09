@@ -27,8 +27,8 @@ namespace JsonDotNet.CustomContractResolvers
         /// <param name="excludeProperties">The exclude properties.</param>
         public PropertiesContractResolver(string properties = "", string excludeProperties = "")
         {
-            this.Properties = new PropertiesCollection(properties);
-            this.ExcludeProperties = new PropertiesCollection(excludeProperties);
+            Properties = new PropertiesCollection(properties);
+            ExcludeProperties = new PropertiesCollection(excludeProperties);
         }
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace JsonDotNet.CustomContractResolvers
         /// <param name="excludeProperties">The exclude properties collection.</param>
         public PropertiesContractResolver(IEnumerable<string> properties, IEnumerable<string> excludeProperties)
         {
-            this.Properties = new PropertiesCollection(properties);
-            this.ExcludeProperties = new PropertiesCollection(excludeProperties);
+            Properties = new PropertiesCollection(properties);
+            ExcludeProperties = new PropertiesCollection(excludeProperties);
         }
 
         /// <summary>
@@ -82,12 +82,12 @@ namespace JsonDotNet.CustomContractResolvers
         /// </returns>
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            this.normalizedProperties = this.NormalizeProperties(this.Properties);
-            this.normalizedExcludeProperties = this.NormalizeProperties(this.ExcludeProperties);
+            normalizedProperties = NormalizeProperties(Properties);
+            normalizedExcludeProperties = NormalizeProperties(ExcludeProperties);
 
-            if (this.NoPropertiesHaveBeenSpecified())
+            if (NoPropertiesHaveBeenSpecified())
             {
-                this.MarkAllPropertiesForSerialization();
+                MarkAllPropertiesForSerialization();
             }
 
             return base.CreateProperties(type, memberSerialization);
@@ -102,7 +102,7 @@ namespace JsonDotNet.CustomContractResolvers
         /// </returns>
         protected override Predicate<object> ShouldSerialize(JsonProperty jsonProperty)
         {
-            return i => this.PropertyIsIncluded(jsonProperty) && !this.PropertyIsExcluded(jsonProperty);
+            return i => PropertyIsIncluded(jsonProperty) && !PropertyIsExcluded(jsonProperty);
         }
 
         private static bool PropertiesContainsProperty(ICollection<string> properties, JsonProperty jsonProperty)
@@ -135,7 +135,7 @@ namespace JsonDotNet.CustomContractResolvers
 
         private PropertiesCollection NormalizeProperties(PropertiesCollection properties)
         {
-            if (this.PropertyMatchMode == PropertyMatchMode.Name)
+            if (PropertyMatchMode == PropertyMatchMode.Name)
             {
                 return new PropertiesCollection(AddTypeWildcardToNameOnlyProperties(properties));
             }
@@ -143,12 +143,12 @@ namespace JsonDotNet.CustomContractResolvers
             return properties;
         }
 
-        private void MarkAllPropertiesForSerialization() => this.normalizedProperties.Add(Wildcard);
+        private void MarkAllPropertiesForSerialization() => normalizedProperties.Add(Wildcard);
 
-        private bool NoPropertiesHaveBeenSpecified() => !this.normalizedProperties.Any();
+        private bool NoPropertiesHaveBeenSpecified() => !normalizedProperties.Any();
 
-        private bool PropertyIsIncluded(JsonProperty jsonProperty) => PropertiesContainsProperty(this.normalizedProperties, jsonProperty);
+        private bool PropertyIsIncluded(JsonProperty jsonProperty) => PropertiesContainsProperty(normalizedProperties, jsonProperty);
 
-        private bool PropertyIsExcluded(JsonProperty jsonProperty) => PropertiesContainsProperty(this.normalizedExcludeProperties, jsonProperty);
+        private bool PropertyIsExcluded(JsonProperty jsonProperty) => PropertiesContainsProperty(normalizedExcludeProperties, jsonProperty);
     }
 }
