@@ -8,4 +8,6 @@ packages/
 bin/
 obj/
 build/
+tools/
+coverage.opencover.xml
 StyleCop.Cache
