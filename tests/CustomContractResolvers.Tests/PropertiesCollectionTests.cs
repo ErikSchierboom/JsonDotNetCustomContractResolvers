@@ -68,7 +68,7 @@
             // Act
 
             // Assert
-            Assert.Equal(0, propertiesCollection.Count);
+            Assert.Empty(propertiesCollection);
         }
 
         [Theory]
@@ -84,8 +84,8 @@
             // Act
 
             // Assert
-            Assert.True(propertiesCollection.Contains("Movie.Id"));
-            Assert.True(propertiesCollection.Contains("Movie.Title"));
+            Assert.Contains("Movie.Id", propertiesCollection);
+            Assert.Contains("Movie.Title", propertiesCollection);
         }
 
         [Fact]
@@ -97,7 +97,7 @@
             // Act
 
             // Assert
-            Assert.True(propertiesCollection.Contains("Movie.Id"));
+            Assert.Contains("Movie.Id", propertiesCollection);
         }
 
         [Fact]
@@ -127,7 +127,7 @@
             propertiesCollection.Add(whiteSpaceProperty);
 
             // Assert
-            Assert.Equal(0, propertiesCollection.Count);
+            Assert.Empty(propertiesCollection);
         }
 
         [Fact]
@@ -140,7 +140,7 @@
             propertiesCollection.Add("Movie.Id");
 
             // Assert
-            Assert.True(propertiesCollection.Contains("Movie.Id"));
+            Assert.Contains("Movie.Id", propertiesCollection);
         }
 
         [Fact]
@@ -180,7 +180,7 @@
             propertiesCollection.Add(" Movie.Id ");
 
             // Assert
-            Assert.True(propertiesCollection.Contains("Movie.Id"));
+            Assert.Contains("Movie.Id", propertiesCollection);
         }
 
         [Theory]
@@ -197,8 +197,8 @@
             propertiesCollection.Add(properties);
 
             // Assert
-            Assert.True(propertiesCollection.Contains("Movie.Id"));
-            Assert.True(propertiesCollection.Contains("Movie.Title"));
+            Assert.Contains("Movie.Id", propertiesCollection);
+            Assert.Contains("Movie.Title", propertiesCollection);
         }
         
         [Fact]

@@ -73,7 +73,7 @@
             // Act
 
             // Assert
-            Assert.False(propertiesContractResolver.Properties.Any());
+            Assert.Empty(propertiesContractResolver.Properties);
         }
 
         [Theory]
@@ -88,7 +88,7 @@
             // Act
 
             // Assert
-            Assert.False(propertiesContractResolver.ExcludeProperties.Any());
+            Assert.Empty(propertiesContractResolver.ExcludeProperties);
         }
 
         [Fact]
@@ -100,7 +100,7 @@
             // Act
 
             // Assert
-            Assert.False(propertiesContractResolver.Properties.Any());
+            Assert.Empty(propertiesContractResolver.Properties);
         }
 
         [Fact]
@@ -112,7 +112,7 @@
             // Act
 
             // Assert
-            Assert.False(propertiesContractResolver.ExcludeProperties.Any());
+            Assert.Empty(propertiesContractResolver.ExcludeProperties);
         }
 
         [Fact]
@@ -124,7 +124,7 @@
             // Act
 
             // Assert
-            Assert.True(propertiesContractResolver.Properties.Contains("Movie.Id"));
+            Assert.Contains("Movie.Id", propertiesContractResolver.Properties);
         }
 
         [Fact]
@@ -136,7 +136,7 @@
             // Act
 
             // Assert
-            Assert.True(propertiesContractResolver.ExcludeProperties.Contains("Movie.Id"));
+            Assert.Contains("Movie.Id", propertiesContractResolver.ExcludeProperties);
         }
 
         [Theory]
@@ -153,8 +153,8 @@
             // Act
 
             // Assert
-            Assert.True(propertiesContractResolver.Properties.Contains("Movie.Id"));
-            Assert.True(propertiesContractResolver.Properties.Contains("Movie.Title"));
+            Assert.Contains("Movie.Id", propertiesContractResolver.Properties);
+            Assert.Contains("Movie.Title", propertiesContractResolver.Properties);
         }
 
         [Theory]
@@ -171,8 +171,8 @@
             // Act
 
             // Assert
-            Assert.True(propertiesContractResolver.ExcludeProperties.Contains("Movie.Id"));
-            Assert.True(propertiesContractResolver.ExcludeProperties.Contains("Movie.Title"));
+            Assert.Contains("Movie.Id", propertiesContractResolver.ExcludeProperties);
+            Assert.Contains("Movie.Title", propertiesContractResolver.ExcludeProperties);
         }
         
         [Fact]
@@ -586,7 +586,7 @@
 
         [Theory]
         [InlineData("Id")]
-        [InlineData("Id")]
+        [InlineData("iD")]
         [InlineData("ID")]
         [InlineData("id")]
         public void NamePropertyMatchModeMatchesExcludePropertiesCaseInsensitive(string field)
