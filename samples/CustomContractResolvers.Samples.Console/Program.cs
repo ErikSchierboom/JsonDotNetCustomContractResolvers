@@ -12,9 +12,7 @@
             ShowExplanation();
 
             foreach (var example in GetExamples())
-            {
                 example.ShowUsage();
-            }
         }
 
         private static void ShowExplanation()
@@ -25,18 +23,16 @@
             Console.ReadKey();
         }
 
-        private static IEnumerable<Example> GetExamples()
-        {
-            return new List<Example>
-                       {
-                           new SimpleExample(),
-                           new SimpleExcludeExample(),
-                           new ExplicitTypeExample(),
-                           new NesterPropertiesExample(),
-                           new PropertyWildcardExample(),
-                           new TypeWildcardExample(),
-                           new GeneralWildcardExample()
-                       };
-        }
+        private static IEnumerable<Example> GetExamples() =>
+            new List<Example>
+            {
+                new SimpleExample(),
+                new SimpleExcludeExample(),
+                new ExplicitTypeExample(),
+                new NesterPropertiesExample(),
+                new PropertyWildcardExample(),
+                new TypeWildcardExample(),
+                new GeneralWildcardExample()
+            };
     }
 }
