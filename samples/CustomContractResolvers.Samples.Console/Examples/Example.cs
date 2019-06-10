@@ -2,7 +2,7 @@
 {
     using System;
 
-    using JsonDotNet.CustomContractResolvers.Samples.Console.Models;
+    using Models;
 
     using Newtonsoft.Json;
 
@@ -56,23 +56,19 @@
             Console.WriteLine("Custom serialization result: {0}", JsonConvert.SerializeObject(obj, customJsonSerializerSettings));
         }
 
-        protected static Director CreateDirector()
-        {
-            return new Director
-                       {
-                           Id = 79,
-                           Name = "Christopher Nolan"
-                       };
-        }
+        protected static Director CreateDirector() =>
+            new Director
+            {
+                Id = 79,
+                Name = "Christopher Nolan"
+            };
 
-        protected static Movie CreateMovie()
-        {
-            return new Movie
-                       {
-                           Id = 12,
-                           Title = "Inception",
-                           Director = CreateDirector()
-                       };
-        }
+        protected static Movie CreateMovie() =>
+            new Movie
+            {
+                Id = 12,
+                Title = "Inception",
+                Director = CreateDirector()
+            };
     }
 }

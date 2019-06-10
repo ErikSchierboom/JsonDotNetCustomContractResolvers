@@ -2,7 +2,7 @@
 {
     using System;
 
-    using JsonDotNet.CustomContractResolvers.Tests.Stubs;
+    using Stubs;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;

@@ -1,28 +1,6 @@
-version: 1.0.{build}
 image: Visual Studio 2017
-configuration: Release
 environment:
   COVERALLS_REPO_TOKEN:
     secure: 6SxnmcsbHLpcfES46A0eXWmBmQVRfGOJKja7VYhJzvTlsyDCEPNvZ5EfusbAk9xz
-before_build:
-- cmd: nuget restore .\samples\CustomContractResolvers.Samples.Website -PackagesDirectory packages
-- cmd: dotnet restore .\src\CustomContractResolvers
-- cmd: dotnet restore .\tests\CustomContractResolvers.Tests
-build:
-  verbosity: minimal
-  project: CustomContractResolvers.sln
-before_test:
-- cmd: nuget install opencover -OutputDirectory packages
-- cmd: nuget install coveralls.net -OutputDirectory packages
-test_script:
-- ps: 
-- ps: >-
-    $opencover = (Resolve-Path "packages/OpenCover.*/tools/OpenCover.Console.exe").ToString()
-
-    & $opencover -register:user -oldstyle -target:"dotnet.exe" "-targetargs:test .\tests\CustomContractResolvers.Tests" -filter:"+[JsonDotNet.CustomContractResolvers*]*" -output:coverage.xml
-
-    if ($env:COVERALLS_REPO_TOKEN) {
-        $coveralls = (Resolve-Path "packages/coveralls.net.*/tools/csmacnz.coveralls.exe").ToString()
-
-        & $coveralls --opencover -i coverage.xml --repoToken $env:COVERALLS_REPO_TOKEN --commitId $env:APPVEYOR_REPO_COMMIT --commitBranch $env:APPVEYOR_REPO_BRANCH --commitAuthor $env:APPVEYOR_REPO_COMMIT_AUTHOR --commitEmail $env:APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL --commitMessage $env:APPVEYOR_REPO_COMMIT_MESSAGE --jobId $env:APPVEYOR_JOB_ID
-    }
+build_script:
+- ps: ./build.ps1

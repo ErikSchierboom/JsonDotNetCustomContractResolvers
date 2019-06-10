@@ -1,15 +1,28 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>JsonDotNet.CustomContractResolvers</AssemblyName>
     <RootNamespace>JsonDotNet.CustomContractResolvers</RootNamespace>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <DebugType>full</DebugType>
+    <PackageVersion>2.0.0</PackageVersion>
+    <Title>JSON.NET Custom Contract Resolvers</Title>
+    <Description>Custom contract resolvers for JSON.NET, including a contract resolver with which one can easily exclude fields from being serialized without using attributes.</Description>
+    <Authors>Erik Schierboom</Authors>
+    <Copyright>Copyright © Erik Schierboom 2019</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>JSON.NET JSON ContractResolver Properties Exclude</PackageTags>
+    <PackageReleaseNotes>Upgraded to latest version of JSON.NET.</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/ErikSchierboom/JsonDotNetCustomContractResolvers</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.ComponentModel.DataAnnotations, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\..\..\..\..\..\Library\Frameworks\Mono.framework\Versions\5.16.0\lib\mono\4.6.1-api\System.ComponentModel.DataAnnotations.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

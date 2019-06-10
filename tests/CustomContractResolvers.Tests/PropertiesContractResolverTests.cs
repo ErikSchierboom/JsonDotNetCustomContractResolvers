@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using JsonDotNet.CustomContractResolvers.Tests.Stubs;
+    using Stubs;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
@@ -73,7 +73,7 @@
             // Act
 
             // Assert
-            Assert.False(propertiesContractResolver.Properties.Any());
+            Assert.Empty(propertiesContractResolver.Properties);
         }
 
         [Theory]
@@ -88,7 +88,7 @@
             // Act
 
             // Assert
-            Assert.False(propertiesContractResolver.ExcludeProperties.Any());
+            Assert.Empty(propertiesContractResolver.ExcludeProperties);
         }
 
         [Fact]
@@ -100,7 +100,7 @@
             // Act
 
             // Assert
-            Assert.False(propertiesContractResolver.Properties.Any());
+            Assert.Empty(propertiesContractResolver.Properties);
         }
 
         [Fact]
@@ -112,7 +112,7 @@
             // Act
 
             // Assert
-            Assert.False(propertiesContractResolver.ExcludeProperties.Any());
+            Assert.Empty(propertiesContractResolver.ExcludeProperties);
         }
 
         [Fact]
@@ -124,7 +124,7 @@
             // Act
 
             // Assert
-            Assert.True(propertiesContractResolver.Properties.Contains("Movie.Id"));
+            Assert.Contains("Movie.Id", propertiesContractResolver.Properties);
         }
 
         [Fact]
@@ -136,7 +136,7 @@
             // Act
 
             // Assert
-            Assert.True(propertiesContractResolver.ExcludeProperties.Contains("Movie.Id"));
+            Assert.Contains("Movie.Id", propertiesContractResolver.ExcludeProperties);
         }
 
         [Theory]
@@ -153,8 +153,8 @@
             // Act
 
             // Assert
-            Assert.True(propertiesContractResolver.Properties.Contains("Movie.Id"));
-            Assert.True(propertiesContractResolver.Properties.Contains("Movie.Title"));
+            Assert.Contains("Movie.Id", propertiesContractResolver.Properties);
+            Assert.Contains("Movie.Title", propertiesContractResolver.Properties);
         }
 
         [Theory]
@@ -171,8 +171,8 @@
             // Act
 
             // Assert
-            Assert.True(propertiesContractResolver.ExcludeProperties.Contains("Movie.Id"));
-            Assert.True(propertiesContractResolver.ExcludeProperties.Contains("Movie.Title"));
+            Assert.Contains("Movie.Id", propertiesContractResolver.ExcludeProperties);
+            Assert.Contains("Movie.Title", propertiesContractResolver.ExcludeProperties);
         }
         
         [Fact]
@@ -224,7 +224,7 @@
         public void ConvertingUsingWildcardsDoesNotModifyExcludePropertiesCollection(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
-            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
+            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
             propertiesContractResolver.ExcludeProperties.Add("*");
             propertiesContractResolver.ExcludeProperties.Add("*.Title");
             propertiesContractResolver.ExcludeProperties.Add("Title");
@@ -586,7 +586,7 @@
 
         [Theory]
         [InlineData("Id")]
-        [InlineData("Id")]
+        [InlineData("iD")]
         [InlineData("ID")]
         [InlineData("id")]
         public void NamePropertyMatchModeMatchesExcludePropertiesCaseInsensitive(string field)
@@ -814,7 +814,7 @@
         public void ExcludePropertiesWithTypeWildcardPropertyDoesNotSerializeAnyPropertyWithTheSpecifiedType(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
-            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
+            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
             propertiesContractResolver.ExcludeProperties.Add("Movie.*");
 
             // Act
@@ -830,7 +830,7 @@
         public void ExcludePropertiesWithTypeWildcardForNestedPropertyDoesNotSerializeAnyPropertyWithTheSpecifiedType(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
-            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
+            var propertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
             propertiesContractResolver.ExcludeProperties.Add("Director.*");
 
             // Act
@@ -846,7 +846,7 @@
         public void ExcludePropertiesWithTypeWildcardDoesNotSerializeAnyPropertyWithTheSpecifiedName(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
-            var customPropertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
+            var customPropertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
             customPropertiesContractResolver.ExcludeProperties.Add("*.Title");
 
             // Act
@@ -862,7 +862,7 @@
         public void ExcludePropertiesWithTypeWildcardAddedForPropertyInDifferentTypesDoesNotSerializePropertyInAnyType(PropertyMatchMode propertyMatchMode)
         {
             // Arrange
-            var customPropertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = PropertyMatchMode.NameAndType };
+            var customPropertiesContractResolver = new PropertiesContractResolver { PropertyMatchMode = propertyMatchMode };
             customPropertiesContractResolver.ExcludeProperties.Add("*.Id");
 
             // Act
@@ -936,28 +936,21 @@
             Assert.Equal("{}", json);
         }
 
-        private static JsonSerializerSettings CreateCustomJsonSerializerSettings(IContractResolver contractResolver)
-        {
-            return new JsonSerializerSettings { ContractResolver = contractResolver };
-        }
+        private static JsonSerializerSettings CreateCustomJsonSerializerSettings(IContractResolver contractResolver) =>
+            new JsonSerializerSettings { ContractResolver = contractResolver };
 
-        private static JsonSerializerSettings CreateDefaultJsonSerializerSettings()
-        {
-            return new JsonSerializerSettings();
-        }
+        private static JsonSerializerSettings CreateDefaultJsonSerializerSettings() => new JsonSerializerSettings();
 
-        private static Movie CreateObjectToSerialize()
-        {
-            return new Movie
-                       {
-                           Id = 12,
-                           Title = "Inception",
-                           Director = new Director
-                                          {
-                                              Id = 77,
-                                              Name = "Christopher Nolan",
-                                          }
-                       };
-        }
+        private static Movie CreateObjectToSerialize() =>
+            new Movie
+            {
+                Id = 12,
+                Title = "Inception",
+                Director = new Director
+                {
+                    Id = 77,
+                    Name = "Christopher Nolan",
+                }
+            };
     }
 }

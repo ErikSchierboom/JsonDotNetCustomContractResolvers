@@ -1,8 +1,13 @@
-# git ignore file
 *.nupkg
 *.sln.DotSettings*
 *.suo
-.vs
-packages
+.vs/
+.vscode/
+.idea/
+packages/
+bin/
+obj/
+build/
+tools/
+coverage.opencover.xml
 StyleCop.Cache
-build

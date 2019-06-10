@@ -1,0 +1,49 @@
+@page
+@using JsonDotNet.CustomContractResolvers
+@model CustomContractResolvers.Samples.Website.Pages.Index
+
+
+<h2>Custom contract resolvers</h2>
+<p>
+    Here you can test the PropertiesContractResolver class.
+</p>
+
+<div class="row">
+    <div class="col-md-8">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Json" class="control-label"></label>
+                <input asp-for="Json" class="form-control" readonly="readonly" />
+                <span asp-validation-for="Json" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IncludeProperties" class="control-label"></label>
+                <input asp-for="IncludeProperties" class="form-control" />
+                <span asp-validation-for="IncludeProperties" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExcludeProperties" class="control-label"></label>
+                <input asp-for="ExcludeProperties" class="form-control" />
+                <span asp-validation-for="ExcludeProperties" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PropertyMatchMode" class="control-label"></label>
+                <select asp-for="PropertyMatchMode" asp-items="Html.GetEnumSelectList<PropertyMatchMode>()" class="form-control"></select>
+                <span asp-validation-for="PropertyMatchMode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Serialize" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.JsonSerialized != null) {
+    <h2>Serialized JSON</h2>
+
+    <pre>
+        @Model.JsonSerialized
+    </pre>
+}
+
