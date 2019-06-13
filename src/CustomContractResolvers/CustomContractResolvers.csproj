@@ -19,10 +19,4 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="System.ComponentModel.DataAnnotations, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <HintPath>..\..\..\..\..\..\Library\Frameworks\Mono.framework\Versions\5.16.0\lib\mono\4.6.1-api\System.ComponentModel.DataAnnotations.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
